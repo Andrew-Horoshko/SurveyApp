@@ -35,7 +35,8 @@ namespace SurveyAppServer.Controllers
 
             UpdateAverageRating(surveyRating.SurveyId);
 
-            return CreatedAtAction(nameof(GetSurveyRating), new { id = surveyRating.SurveyRatingId }, surveyRating);
+            string getSurveyRatingName = nameof(GetSurveyRating);
+            return CreatedAtAction(getSurveyRatingName, new { id = surveyRating.SurveyRatingId }, surveyRating);
         }
 
         private async Task<ActionResult<SurveyRating>> GetSurveyRating(int id)

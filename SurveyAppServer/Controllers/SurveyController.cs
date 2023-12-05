@@ -75,7 +75,8 @@ namespace SurveyAppServer.Controllers
             _context.SurveyAttempts.Add(surveyAttempt);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetSurveyAttempt), new { id = surveyAttempt.SurveyAttemptId }, surveyAttempt);
+            string getSurveyAttemptName = nameof(GetSurveyAttempt);
+            return CreatedAtAction(getSurveyAttemptName, new { id = surveyAttempt.SurveyAttemptId }, surveyAttempt);
         }
 
         private async Task<ActionResult<SurveyAttempt>> GetSurveyAttempt(int id)
