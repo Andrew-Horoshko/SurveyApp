@@ -1,9 +1,15 @@
 import './index.scss';
-import AppRoutes from './routes/Routes';
+import { ErrorBoundary } from './components';
+import { Security } from './auth/Security';
+import Routes from './routes/Routes';
 
 function App() {
   return (
-    <AppRoutes />
+    <ErrorBoundary>
+      <Security>
+        <Routes />
+      </Security>
+    </ErrorBoundary>
   )
 }
 

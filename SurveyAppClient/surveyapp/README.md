@@ -1,30 +1,50 @@
-# React + TypeScript + Vite
+# Reserwise
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Primary technologies:
 
-Currently, two official plugins are available:
+1. React (v17)
+2. npm (latest)
+3. Vite (latest)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## Contributing
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+For contributing instructions, check [Contributing](./docs/Contributing.md)
 
-- Configure the top-level `parserOptions` property like this:
+## Code conventions
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+For code conventions, check [CodeConventions](./docs/CodeConventions.md)
+
+---
+
+## Important CLI commands
+
+1. `npm run dev` default dev server start
+2. `npm run build` build application
+
+## High level folder structure
+
+`src` folder
+
 ```
+  index.html - HTML template for base page
+  src
+    └─ App.jsx - React entry point
+    └─ main.tsx - TS entry point
+    └─ index.scss - SCSS entry point(globals, reset, etc.)
+    └─ assets - all static assets
+    |   └─ icons - SVG icons as React components
+    |   └─ images - PNG,JPEG images
+    └─ components - shared common components
+    └─ constants - all shared constant values
+    └─ helpers - shared common helpers
+    └─ hooks - shared common hook
+    └─ pages - common pages(e.g. Login page)
+    └─ routes
+    |  └─ Routes.jsx - routes entry point
+    └─ services - base implemetation of API interactions and common API services (e.g. Auth)
+    └─ types - common types
+    └─ styles - common styles/mixins/variables
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+```

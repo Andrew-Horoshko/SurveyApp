@@ -1,0 +1,48 @@
+.place__container {
+    @include font($font-size: 1rem, $line-height: $line-height-sm, $color: $black);
+    @include set-size(90%, 430px);
+    position: relative;
+    margin-bottom: 20px;
+    padding: 7px 0px 0px 5px;
+    background-color: $white;
+    border-radius: 20px;
+    overflow: hidden;
+    
+    @include screen-md(){
+        height: 320px
+    }
+
+    & img {
+      @include set-size(99%, 250px);
+      object-fit: contain;
+      border-radius: 20px;
+
+      @include screen-md(){
+        height: 200px
+        }
+    }
+}
+
+.place__name {
+    padding: 3px 0px 0px 5px;
+    @include dots;
+    white-space: nowrap; 
+}
+  
+.place__description {
+      padding: 0px 10px 0px 5px;
+      margin-top: 5px;
+      @include dots;
+      word-wrap: break-word;
+}
+
+.start_button{
+    @include set-size(99%, 50px);
+    background-color: rgb(0, 255, 128);
+    @include font($font-size: 1rem, $line-height: $line-height-sm, $color: $black);
+    border-radius: 20px;
+    position: absolute;
+        bottom: 10px; /* Змініть це значення відповідно до вашого макету */
+        left: 50%; /* Це позиціонування по центру. Змініть відповідно до вашого макету */
+        transform: translateX(-50%);
+}

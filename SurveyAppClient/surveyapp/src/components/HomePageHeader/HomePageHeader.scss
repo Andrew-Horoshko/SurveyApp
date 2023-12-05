@@ -1,47 +1,19 @@
 .header{
-    @include flex($items:center, $content:space-between);
-    padding: 1%;
-    font-weight: bold;
-    background-color: $color-theme-grey;
-  
-    &__user {
-      display: flex;
-      cursor: pointer;
-    }
-    
-    &__icon {
-      margin-right: 10px;
-  
-      & img {
-        width: 20px;
-      }
-    }
-    }
-  
-    .search-heart-container {
-      @include flex($content:center, $items:center);
-    }
-    
-    .heart-button {
-      margin: 5px 10px 0px 0px;
-    }
-    
-    .search {
-      position: relative;
-    
-      & input {
-        padding-left: 30px;
-        background-position: 5px center;
-        background-repeat: no-repeat;
-        background-size: 20px;
-        height: 30px;
-        border: none;
-        box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-        border-radius: 10px;
-        outline: none;
-  
-        @include screen-sm() {
-          width: 150px;
-        }
-      }
+  @include flex($items:center, $content:space-between);
+  padding: 1%;
+  font-weight: bold;
+  background-color: $color-theme-grey;
+
+  &__user {
+    display: flex;
+    cursor: pointer;
   }
+  
+  &__icon {
+    margin-right: 10px;
+
+    & img {
+      width: 20px;
+    }
+  }
+}
