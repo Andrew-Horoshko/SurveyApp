@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using System.Net.Mail;
 using SurveyAppServer.Models;
+using SurveyAppServer.Models.Surveys;
 
 namespace SurveyAppServer.Controllers
 {
@@ -10,9 +11,9 @@ namespace SurveyAppServer.Controllers
     [ApiController]
     public class UserManualController : ControllerBase
     {
-        private readonly SurveyDbContext _context;
+        private readonly SurveyAppDbContext _context;
 
-        public UserManualController(SurveyDbContext context)
+        public UserManualController(SurveyAppDbContext context)
         {
             _context = context;
         }

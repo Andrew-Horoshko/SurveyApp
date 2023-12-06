@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using SurveyAppServer.Models;
+
+using SurveyAppServer.Models.Surveys;
 
 namespace SurveyAppServer.Controllers
 {
@@ -8,9 +9,9 @@ namespace SurveyAppServer.Controllers
     [ApiController]
     public class RatingsController : ControllerBase
     {
-        private readonly SurveyDbContext _context;
+        private readonly SurveyAppDbContext _context;
 
-        public RatingsController(SurveyDbContext context)
+        public RatingsController(SurveyAppDbContext context)
         {
             _context = context;
         }
@@ -23,7 +24,7 @@ namespace SurveyAppServer.Controllers
 
             if (existingRating != null)
             {
-                existingRating.Rating = surveyRating.Rating;
+                existingRating.Mark = surveyRating.Mark;
                 _context.Entry(existingRating).State = EntityState.Modified;
             }
             else
@@ -61,7 +62,7 @@ namespace SurveyAppServer.Controllers
                 {
                     SurveyName = r.Survey.Title,
                     UserName = r.User.Username,
-                    Rating = r.Rating
+                    r.Mark
                 })
                 .ToListAsync();
 
@@ -73,7 +74,7 @@ namespace SurveyAppServer.Controllers
             var ratings = _context.SurveyRatings.Where(r => r.SurveyId == surveyId).ToList();
             if (ratings.Any())
             {
-                var averageRating = ratings.Average(r => r.Rating);
+                var averageRating = ratings.Average(r => (int) r.Mark);
                 var survey = _context.Surveys.Find(surveyId);
                 if (survey != null)
                 {
@@ -84,5 +85,4 @@ namespace SurveyAppServer.Controllers
             }
         }
     }
-
 }
