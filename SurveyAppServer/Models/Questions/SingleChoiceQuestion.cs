@@ -4,5 +4,5 @@ namespace SurveyAppServer.Models.Questions;
 
 public class SingleChoiceQuestion : QuestionBase
 {
-    public Answer? Answer { get; set; }
+    public ICollection<Answer> Answers { get; set; } = null!;
 }

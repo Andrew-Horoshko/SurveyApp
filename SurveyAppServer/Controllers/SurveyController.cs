@@ -60,11 +60,10 @@ namespace SurveyAppServer.Controllers
         {
             var surveyWithQuestions = await _context.Surveys
                 .Include(s => s.Questions)
-                .ThenInclude(q => (q as SingleChoiceQuestion)!.Answer)
+                .ThenInclude(q => (q as SingleChoiceQuestion)!.Answers)
                 .Include(s => s.Questions)
                 .ThenInclude(q => (q as MultipleChoiceQuestion)!.Answers)
                 .Include(s => s.Questions)
-                .ThenInclude(q => (q as OpenTextQuestion)!.Text)
                 .FirstOrDefaultAsync(s => s.SurveyId == surveyId);
 
             if (surveyWithQuestions == null)

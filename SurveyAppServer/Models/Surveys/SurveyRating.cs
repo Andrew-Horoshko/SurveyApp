@@ -4,9 +4,9 @@ namespace SurveyAppServer.Models.Surveys;
 
 public enum SurveyMarks
 {
-    VeryLow,
-    Low,
-    Medium,
+    VeryBad,
+    Bad,
+    Ok,
     Good,
     VeryGood
 }
