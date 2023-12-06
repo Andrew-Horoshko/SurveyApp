@@ -17,7 +17,7 @@ namespace SurveyAppServer.Migrations
                 {
                     SurveyId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Title = table.Column<string>(type: "text", nullable: false),
                     AverageRating = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
@@ -31,9 +31,9 @@ namespace SurveyAppServer.Migrations
                 {
                     UserId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Username = table.Column<string>(type: "text", nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: false),
+                    Password = table.Column<string>(type: "text", nullable: false),
                     Role = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -47,8 +47,8 @@ namespace SurveyAppServer.Migrations
                 {
                     QuestionId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Tooltip = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Text = table.Column<string>(type: "text", nullable: false),
+                    Tooltip = table.Column<string>(type: "text", nullable: false),
                     Type = table.Column<int>(type: "int", nullable: false),
                     SurveyId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -69,8 +69,8 @@ namespace SurveyAppServer.Migrations
                 {
                     UserManualId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Content = table.Column<string>(type: "text", nullable: false),
+                    Title = table.Column<string>(type: "text", nullable: false),
                     SurveyId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -168,7 +168,7 @@ namespace SurveyAppServer.Migrations
                 {
                     AnswerOptionId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Text = table.Column<string>(type: "text", nullable: false),
                     QuestionId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -188,7 +188,7 @@ namespace SurveyAppServer.Migrations
                 {
                     SurveyAnswerId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    AnswerText = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AnswerText = table.Column<string>(type: "text", nullable: false),
                     SurveyAttemptId = table.Column<int>(type: "int", nullable: false),
                     QuestionId = table.Column<int>(type: "int", nullable: false)
                 },

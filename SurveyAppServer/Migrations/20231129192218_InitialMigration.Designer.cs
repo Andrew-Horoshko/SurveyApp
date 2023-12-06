@@ -11,7 +11,7 @@ using SurveyAppServer.Models;
 
 namespace SurveyAppServer.Migrations
 {
-    [DbContext(typeof(SurveyDbContext))]
+    [DbContext(typeof(SurveyAppDbContext))]
     [Migration("20231129192218_InitialMigration")]
     partial class InitialMigration
     {
