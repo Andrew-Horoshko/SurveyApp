@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using SurveyAppServer.Models;
+
+using SurveyAppServer.Models.Questions;
+using SurveyAppServer.Models.Surveys;
 
 namespace SurveyAppServer.Controllers
 {
@@ -8,9 +10,9 @@ namespace SurveyAppServer.Controllers
     [ApiController]
     public class SurveyController : ControllerBase
     {
-        private readonly SurveyDbContext _context;
+        private readonly SurveyAppDbContext _context;
 
-        public SurveyController(SurveyDbContext context)
+        public SurveyController(SurveyAppDbContext context)
         {
             _context = context;
         }
@@ -54,11 +56,14 @@ namespace SurveyAppServer.Controllers
         }
 
         [HttpGet("Questions/{surveyId}")]
-        public async Task<ActionResult<IEnumerable<Question>>> GetSurveyQuestions(int surveyId)
+        public async Task<ActionResult<IEnumerable<QuestionBase>>> GetSurveyQuestions(int surveyId)
         {
             var surveyWithQuestions = await _context.Surveys
                 .Include(s => s.Questions)
-                .ThenInclude(q => q.AnswerOptions)
+                .ThenInclude(q => (q as SingleChoiceQuestion)!.Answers)
+                .Include(s => s.Questions)
+                .ThenInclude(q => (q as MultipleChoiceQuestion)!.Answers)
+                .Include(s => s.Questions)
                 .FirstOrDefaultAsync(s => s.SurveyId == surveyId);
 
             if (surveyWithQuestions == null)
