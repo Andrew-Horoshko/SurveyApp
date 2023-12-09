@@ -5,7 +5,9 @@ import path from 'path';
 // https://vitejs.dev/config/
 export default defineConfig({
   server: {
-    host: 'localhost',
+    proxy: {
+      '/api': 'https://localhost:5173'
+    },
   },
   plugins: [react()],
   css: {

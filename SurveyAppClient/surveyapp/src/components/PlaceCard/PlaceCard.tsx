@@ -2,23 +2,22 @@ import React from "react";
 import { Link } from 'react-router-dom';
 import './PlaceCard.scss'
 
-export interface FoodEstablishmentDataProps {
-  id: number;
-  name: string;
-  description: string;
-  images: string[];
+export interface SurveyDataProps {
+  SurveyId: number;
+  AverageRating: number;
+  Title: string;
 }
 
 interface PlaceCardProps {
-  item: FoodEstablishmentDataProps;
+  item: SurveyDataProps;
 }
 
 const PlaceCard: React.FC<PlaceCardProps> = ({ item }) => {
   return (
-    <Link key={item.id} to={`/place/${item.id}`} className="place__container">
-        <img className="place__photo" src={item.images[0]} alt={item.name} />
-        <p className="place__name">{item.name}</p>
-        <p className="place__description">{item.description}</p>
+    <Link key={item.SurveyId} to={`/place/${item.SurveyId}`} className="place__container">
+        {/* <img className="place__photo" src={item.images[0]} alt={item.Title} /> */}
+        <p className="place__name">{item.Title}</p>
+        <p className="place__rating">Average Rating: {item.AverageRating}</p>
         <button className="start_button">Почати опитування</button>
     </Link>
   );
