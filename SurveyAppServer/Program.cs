@@ -2,7 +2,18 @@ using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using SurveyAppServer;
 
+const string allowSpecificOrigins = "_allowSpecificOrigins";
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: allowSpecificOrigins,
+        policy  =>
+        {
+            policy.WithOrigins(builder.Configuration["FrontendOrigin"]);
+        });
+});
 
 builder.Services.AddDbContext<SurveyAppDbContext>(options => 
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -25,6 +36,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(allowSpecificOrigins);
 
 app.UseAuthorization();
 
