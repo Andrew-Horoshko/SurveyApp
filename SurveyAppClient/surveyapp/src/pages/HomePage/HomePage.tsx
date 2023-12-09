@@ -1,7 +1,6 @@
 import React from 'react';
 import { HomePageHeader } from '../../components/HomePageHeader/HomePageHeader';
 import './HomePage.scss';
-import { foodEstablishmentData } from '../../mocks/foodEstablishmentData';
 import PlacesTable from '../../components/PlacesTable/PlacesTable';
 
 export const HomePage: React.FC = () => {
@@ -11,7 +10,7 @@ export const HomePage: React.FC = () => {
       <main className="main">
         <div className="popular__places">
           <h2 className='popular_places'>{('Обрати опитування')}</h2>
-          <PlacesTable places={foodEstablishmentData}/>
+          <PlacesTable/>
         </div>
       </main>
     </div>
