@@ -1,6 +1,6 @@
 .place__container {
     @include font($font-size: 1rem, $line-height: $line-height-sm, $color: $black);
-    @include set-size(90%, 430px);
+    @include set-size(40%, 150px);
     position: relative;
     margin-bottom: 20px;
     padding: 7px 0px 0px 5px;
@@ -29,7 +29,7 @@
     white-space: nowrap; 
 }
   
-.place__description {
+.place__rating {
       padding: 0px 10px 0px 5px;
       margin-top: 5px;
       @include dots;
@@ -42,7 +42,7 @@
     @include font($font-size: 1rem, $line-height: $line-height-sm, $color: $black);
     border-radius: 20px;
     position: absolute;
-        bottom: 10px; /* Змініть це значення відповідно до вашого макету */
-        left: 50%; /* Це позиціонування по центру. Змініть відповідно до вашого макету */
-        transform: translateX(-50%);
+    bottom: 10px; 
+    left: 50%; 
+    transform: translateX(-50%);
 }

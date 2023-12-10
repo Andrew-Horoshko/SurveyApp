@@ -14,3 +14,18 @@
     }
   }
 }
+
+.finish_btn{
+  @include set-size(50%, 50px);
+  background-color: rgb(0, 255, 128);
+  @include font($font-size: 1rem, $line-height: $line-height-sm, $color: $black);
+  border-radius: 20px;
+  position: absolute;
+  bottom: 10px; 
+  left: 50%; 
+  transform: translateX(-50%);
+}
+
+.question{
+  padding-top: 40px;
+}

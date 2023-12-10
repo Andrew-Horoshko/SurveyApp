@@ -1,6 +1,7 @@
 import {Route, Switch, Redirect} from 'react-router-dom';
 import { PlacePage, HomePage, AccountPage } from '../pages';
 import { SignInPage } from '../pages/SignInPage/SignInPage';
+import CompletedSurveysPage from '../pages/CompletedSurveysPage/CompletedSurveysPage';
 
 const Routes = () => {
     return (
@@ -10,6 +11,7 @@ const Routes = () => {
             <Route path="/place/:id" render={() => <PlacePage/>}/>
             <Route path="/home" render={() => <HomePage/>}/>
             <Route path="/sign-in" render={()=><SignInPage/>} />
+            <Route path="/completed-surveys" render={()=><CompletedSurveysPage/>} />
         </Switch>
     );
 };
