@@ -45,16 +45,15 @@ public class QuestionBaseService : IQuestionBaseService
     {
         var question = await GetBaseQuestion(questionId);
         
-        _logger.LogInformation("Queried answers for \"{q}\"", question);
-        _logger.LogInformation("Chance of answering right: {c}", question!.CalculateChance());
+        _logger.LogInformation("Queried answers for:\n{q}", question);
 
-        return question.Answers;
+        return question!.Answers;
     }
 
     public async Task<string> GetQuestionDescriptionAsync(int questionId)
     {
         var question = await GetBaseQuestion(questionId);
 
-        return question!.ToString();
+        return question!.GetDescription();
     }
 }
