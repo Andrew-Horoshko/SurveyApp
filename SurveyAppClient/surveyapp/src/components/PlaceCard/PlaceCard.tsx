@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 import './PlaceCard.scss'
 
 export interface SurveyDataProps {
-  SurveyId: number;
-  AverageRating: number;
-  Title: string;
+  surveyId: number;
+  title: string;
+  averageRating: number;
 }
 
 interface PlaceCardProps {
@@ -14,12 +14,14 @@ interface PlaceCardProps {
 
 const PlaceCard: React.FC<PlaceCardProps> = ({ item }) => {
   return (
-    <Link key={item.SurveyId} to={`/place/${item.SurveyId}`} className="place__container">
-        {/* <img className="place__photo" src={item.images[0]} alt={item.Title} /> */}
-        <p className="place__name">{item.Title}</p>
-        <p className="place__rating">Average Rating: {item.AverageRating}</p>
+    <div className="place__container">
+      {/* <img className="place__photo" src={item.images[0]} alt={item.title} /> */}
+      <h3 className="place__name">{item.title}</h3>
+      <h5 className="place__rating">Рейтинг: {item.averageRating}</h5>
+      <Link key={item.surveyId} to={`/place/${item.surveyId}`} >
         <button className="start_button">Почати опитування</button>
-    </Link>
+      </Link>
+    </div>
   );
 };
 

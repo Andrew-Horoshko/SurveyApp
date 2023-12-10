@@ -1,8 +1,8 @@
 import api from './api'
 
-export const fetchSurveys = async () => {
+export const getCompletedSurveys = async () => {
     try {
-      const response = await api.get('Survey/AllSurveys');
+      const response = await api.get('');
       return response.data;
     } catch (error) {
       console.error('Error fetching surveys:', error);

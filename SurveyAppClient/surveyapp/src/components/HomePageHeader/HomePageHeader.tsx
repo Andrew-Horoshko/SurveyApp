@@ -22,6 +22,15 @@ export const HomePageHeader: React.FC = () => {
         }
     }
 
+    const onViewSurveysClick = (event: React.MouseEvent<HTMLElement>):void => {
+        event.preventDefault();
+        if (isAuthenticated) {
+            history.push('/completed-surveys');
+        } else {
+            history.push('/sign-in');
+        }
+    }
+
     return (
         <header className="header">
             <div className='header__user' onClick={onUserClickHandler}>
@@ -30,6 +39,9 @@ export const HomePageHeader: React.FC = () => {
                 </div>
                 <div className="header__username">{greeting}</div>
             </div>
+            <button className="view-surveys-button" onClick={onViewSurveysClick}>
+                    Завершені опитування
+            </button>
         </header>
 
     );

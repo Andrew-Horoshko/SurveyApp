@@ -1,1 +1,1 @@
-export * from './foodEstablishmentData.ts';
+export * from './surveysDataProps.ts';

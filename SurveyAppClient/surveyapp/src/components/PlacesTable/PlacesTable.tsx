@@ -6,20 +6,22 @@ import PlaceCard from "../PlaceCard/PlaceCard";
 
 const PlacesTable: React.FC = () => {
 
-  const [surveys, setSurveys] = useState<any[]>([]); // Ось тут можна визначити більш конкретний тип для масиву опитувань
+  const [surveys, setSurveys] = useState<any[]>([]); 
 
   useEffect(() => {
     async function getSurveys() {
       try {
-        const data = await fetchSurveys(); // Виклик функції, яка отримує дані опитувань
-        setSurveys(data); // Оновлюємо стан компонента з отриманими даними
+        const data = await fetchSurveys(); 
+        setSurveys(data); 
       } catch (error) {
         console.error('Error fetching surveys:', error);
       }
     }
 
-    getSurveys(); // Викликаємо функцію при завантаженні компонента або можна викликати за необхідності
+    getSurveys(); 
   }, []);
+
+  if (!surveys) return <div>Загрузка...</div>;
 
   return (
     <div>

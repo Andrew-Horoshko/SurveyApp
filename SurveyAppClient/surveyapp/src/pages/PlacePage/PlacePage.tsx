@@ -1,35 +1,75 @@
-import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom'
 import { PageHeader } from "../../components/PageHeader";
-import { foodEstablishmentData } from "../../mocks";
 import './PlacePage.scss';
-import { fetchSurveys } from '../../services/surveyService';
+import React, { useState, useEffect } from "react";
+import { useParams } from 'react-router-dom';
+import { getSurveyQuestions } from '../../services/SurveyQuestions';
+import {} from '../../services/SurveyQuestions'
 
-export const PlacePage = () => {
-      const [surveys, setSurveys] = useState<any[]>([]); // Ось тут можна визначити більш конкретний тип для масиву опитувань
+export const PlacePage: React.FC = () => {
+    const { id } = useParams<{ id: string }>();
+    const [questions, setQuestions] = useState<any[]>([]);
 
-    // Функція завантаження питань та їх відображення
     useEffect(() => {
-        async function getSurveys() {
+        async function fetchQuestions() {
             try {
-              const data = await fetchSurveys(); // Виклик функції, яка отримує дані опитувань
-              setSurveys(data); // Оновлюємо стан компонента з отриманими даними
+                const data = await getSurveyQuestions(parseInt(id));
+                setQuestions(data);
             } catch (error) {
-              console.error('Error fetching surveys:', error);
+                console.error('Error fetching questions:', error);
             }
-          }
-      
-          getSurveys(); // Викликаємо функцію при завантаженні компонента або можна викликати за необхідності
-        }, []);
+        }
+
+        fetchQuestions();
+    }, [id]);
+
+    // const renderQuestion = (question: any) => {
+    //     switch (question.discriminator) {
+    //         case 'SingleChoiceQuestion':
+    //             return (
+    //                 <div key={question.questionId}>
+    //                     <p>{question.text}</p>
+    //                     <input type="radio" name={`question_${question.questionId}`} value="option1" />
+    //                     <label>Option 1</label>
+    //                     <input type="radio" name={`question_${question.questionId}`} value="option2" />
+    //                     <label>Option 2</label>
+    //                     {/* Add more radio buttons/options as needed */}
+    //                 </div>
+    //             );
+    //         case 'MultipleChoiceQuestion':
+    //             return (
+    //                 <div key={question.questionId}>
+    //                     <p>{question.text}</p>
+    //                     <input type="checkbox" name={`question_${question.questionId}_option1`} value="option1" />
+    //                     <label>Option 1</label>
+    //                     <input type="checkbox" name={`question_${question.questionId}_option2`} value="option2" />
+    //                     <label>Option 2</label>
+    //                     {/* Add more checkboxes/options as needed */}
+    //                 </div>
+    //             );
+    //         case 'OpenTextQuestion':
+    //             return (
+    //                 <div key={question.questionId}>
+    //                     <p>{question.text}</p>
+    //                     <input type="text" name={`question_${question.questionId}_answer`} />
+    //                 </div>
+    //             );
+    //         default:
+    //             return null;
+    //     }
+    // };
 
     return (
-        <>
-            <PageHeader headerText={/*place.name ||*/ 'Place Name'}/>
-            <div className="place-page">
-                
-                {/* Кнопка завершення проходження */}
-                <button /*onClick={finishSurvey}*/>Finish Survey</button>
-            </div>
-        </>
+      <>
+          <PageHeader headerText={"Пройдіть опитування"}/>
+          <div className="place-page">
+              <h1>Питання для Survey {id}</h1>
+              <ul>
+                  {questions.map((question: any) => (
+                      <li className='question' key={question.questionId}>{question.text} </li>
+                  ))}
+              </ul>
+              <button className="finish_btn"/*onClick={finishSurvey}*/>Завершити опитування</button>
+          </div>
+      </>
     );
 };
