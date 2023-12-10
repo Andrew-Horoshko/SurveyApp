@@ -7,12 +7,12 @@ public class OpenTextQuestion : BaseQuestion
         QuestionType = Domain.QuestionType.OpenText;
     }
 
-    public override string ToString()
+    public override string GetAnswers()
     {
-        return $"{base.ToString()} (write your answer below)";
+        return "Please write your answer here: ";
     }
 
-    public override double CalculateChance()
+    public override double CalculateOdds()
     {
         return 1;
     }

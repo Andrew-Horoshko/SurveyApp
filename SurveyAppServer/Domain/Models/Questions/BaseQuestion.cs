@@ -19,10 +19,24 @@ public class BaseQuestion
 
     public override string ToString()
     {
+        string description = GetDescription();
+        string answers = GetAnswers();
+        double odds = CalculateOdds();
+
+        return $"{description}\n{answers}\nOdds of answering right: {odds}";
+    }
+
+    public virtual string GetDescription()
+    {
         return $"{QuestionId}. {Text} ({Tooltip})";
     }
 
-    public virtual double CalculateChance()
+    public virtual string GetAnswers()
+    {
+        return string.Empty;
+    }
+
+    public virtual double CalculateOdds()
     {
         return 0;
     }

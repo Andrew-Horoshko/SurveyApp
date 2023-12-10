@@ -7,14 +7,12 @@ public class MultipleChoiceQuestion : BaseQuestion
         QuestionType = Domain.QuestionType.MultipleChoice;
     }
 
-    public override string ToString()
+    public override string GetAnswers()
     {
-        var answers = string.Join(", ", Answers.Select(a => a.Text));
-
-        return $"{base.ToString()}\n{answers}";
+        return string.Join(", ", Answers.Select(a => a.Text));
     }
     
-    public override double CalculateChance()
+    public override double CalculateOdds()
     {
         if (!HasRightAnswer)
         {
