@@ -17,10 +17,44 @@ namespace SurveyAppServer.Controllers
             _userManualService = userManualService;
         }
 
+        // CRUD
+        [HttpGet]
+        public async Task<ActionResult<UserManual>> GetUserManual(int userManualId)
+        {
+            var userManual = await _userManualService.GetUserManualAsync(userManualId);
+
+            return Ok(userManual);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<UserManual>> CreateUserManual(UserManual userManual)
+        {
+            userManual = await _userManualService.CreateUserManualAsync(userManual);
+
+            return Ok(userManual);
+        }
+
+        [HttpPut]
+        public async Task<ActionResult> UpdateUserManual(UserManual userManual)
+        {
+            await _userManualService.UpdateUserManualAsync(userManual);
+
+            return NoContent();
+        }
+
+        [HttpDelete]
+        public async Task<ActionResult> DeleteUserManual(int userManualId)
+        {
+            await _userManualService.DeleteUserManualAsync(userManualId);
+
+            return NoContent();
+        }
+        
+        // Business logic
         [HttpGet("SurveyManual/{surveyId}")]
         public async Task<ActionResult<UserManual>> GetSurveyManual(int surveyId)
         {
-            var surveyManual = _userManualService.GetUserManualBySurveyId(surveyId);
+            var surveyManual = await _userManualService.GetUserManualBySurveyIdAsync(surveyId);
 
             return Ok(surveyManual);
         }

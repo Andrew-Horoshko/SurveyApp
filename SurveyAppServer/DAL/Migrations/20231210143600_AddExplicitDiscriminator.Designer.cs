@@ -3,6 +3,7 @@ using System;
 using DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace SurveyAppServer.Migrations
 {
     [DbContext(typeof(SurveyAppDbContext))]
-    partial class SurveyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231210143600_AddExplicitDiscriminator")]
+    partial class AddExplicitDiscriminator
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.14");
@@ -26,7 +29,13 @@ namespace SurveyAppServer.Migrations
                     b.Property<bool>("IsCorrect")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("MultipleChoiceQuestionQuestionId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("QuestionId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("SingleChoiceQuestionQuestionId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Text")
@@ -35,7 +44,11 @@ namespace SurveyAppServer.Migrations
 
                     b.HasKey("AnswerId");
 
+                    b.HasIndex("MultipleChoiceQuestionQuestionId");
+
                     b.HasIndex("QuestionId");
+
+                    b.HasIndex("SingleChoiceQuestionQuestionId");
 
                     b.ToTable("Answers");
 
@@ -105,7 +118,7 @@ namespace SurveyAppServer.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Domain.Models.Questions.BaseQuestion", b =>
+            modelBuilder.Entity("Domain.Models.Questions.QuestionBase", b =>
                 {
                     b.Property<int>("QuestionId")
                         .ValueGeneratedOnAdd()
@@ -139,7 +152,7 @@ namespace SurveyAppServer.Migrations
 
                     b.ToTable("Questions");
 
-                    b.HasDiscriminator<string>("Discriminator").HasValue("BaseQuestion");
+                    b.HasDiscriminator<string>("Discriminator").HasValue("QuestionBase");
 
                     b.UseTphMappingStrategy();
                 });
@@ -250,7 +263,7 @@ namespace SurveyAppServer.Migrations
                         new
                         {
                             SurveyAttemptId = 1,
-                            AttemptDate = new DateTime(2023, 12, 10, 18, 13, 53, 896, DateTimeKind.Local).AddTicks(4890),
+                            AttemptDate = new DateTime(2023, 12, 10, 15, 35, 59, 700, DateTimeKind.Local).AddTicks(3970),
                             SurveyId = 1,
                             UserId = 1
                         });
@@ -383,7 +396,7 @@ namespace SurveyAppServer.Migrations
 
             modelBuilder.Entity("Domain.Models.Questions.MultipleChoiceQuestion", b =>
                 {
-                    b.HasBaseType("Domain.Models.Questions.BaseQuestion");
+                    b.HasBaseType("Domain.Models.Questions.QuestionBase");
 
                     b.HasDiscriminator().HasValue("MultipleChoiceQuestion");
 
@@ -401,7 +414,7 @@ namespace SurveyAppServer.Migrations
 
             modelBuilder.Entity("Domain.Models.Questions.OpenTextQuestion", b =>
                 {
-                    b.HasBaseType("Domain.Models.Questions.BaseQuestion");
+                    b.HasBaseType("Domain.Models.Questions.QuestionBase");
 
                     b.HasDiscriminator().HasValue("OpenTextQuestion");
 
@@ -419,7 +432,7 @@ namespace SurveyAppServer.Migrations
 
             modelBuilder.Entity("Domain.Models.Questions.SingleChoiceQuestion", b =>
                 {
-                    b.HasBaseType("Domain.Models.Questions.BaseQuestion");
+                    b.HasBaseType("Domain.Models.Questions.QuestionBase");
 
                     b.HasDiscriminator().HasValue("SingleChoiceQuestion");
 
@@ -446,16 +459,24 @@ namespace SurveyAppServer.Migrations
 
             modelBuilder.Entity("Domain.Models.Answers.Answer", b =>
                 {
-                    b.HasOne("Domain.Models.Questions.BaseQuestion", "Question")
+                    b.HasOne("Domain.Models.Questions.MultipleChoiceQuestion", null)
                         .WithMany("Answers")
+                        .HasForeignKey("MultipleChoiceQuestionQuestionId");
+
+                    b.HasOne("Domain.Models.Questions.QuestionBase", "Question")
+                        .WithMany()
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Domain.Models.Questions.SingleChoiceQuestion", null)
+                        .WithMany("Answers")
+                        .HasForeignKey("SingleChoiceQuestionQuestionId");
+
                     b.Navigation("Question");
                 });
 
-            modelBuilder.Entity("Domain.Models.Questions.BaseQuestion", b =>
+            modelBuilder.Entity("Domain.Models.Questions.QuestionBase", b =>
                 {
                     b.HasOne("Domain.Models.Surveys.Survey", "Survey")
                         .WithMany("Questions")
@@ -474,7 +495,7 @@ namespace SurveyAppServer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Models.Questions.BaseQuestion", "Question")
+                    b.HasOne("Domain.Models.Questions.QuestionBase", "Question")
                         .WithMany()
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -557,11 +578,6 @@ namespace SurveyAppServer.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Domain.Models.Questions.BaseQuestion", b =>
-                {
-                    b.Navigation("Answers");
-                });
-
             modelBuilder.Entity("Domain.Models.Surveys.Survey", b =>
                 {
                     b.Navigation("Questions");
@@ -573,6 +589,16 @@ namespace SurveyAppServer.Migrations
             modelBuilder.Entity("Domain.Models.Surveys.SurveyAttempt", b =>
                 {
                     b.Navigation("SurveyAnswers");
+                });
+
+            modelBuilder.Entity("Domain.Models.Questions.MultipleChoiceQuestion", b =>
+                {
+                    b.Navigation("Answers");
+                });
+
+            modelBuilder.Entity("Domain.Models.Questions.SingleChoiceQuestion", b =>
+                {
+                    b.Navigation("Answers");
                 });
 #pragma warning restore 612, 618
         }

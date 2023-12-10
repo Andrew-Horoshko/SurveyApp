@@ -2,6 +2,7 @@ using DAL;
 
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
+using SurveyAppServer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +31,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseMiddleware<ExceptionHandlerMiddleware>();
 app.UseAuthorization();
 
 app.MapControllers();

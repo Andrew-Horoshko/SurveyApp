@@ -12,7 +12,7 @@ public class SurveyAppDbContext : DbContext
     public DbSet<User> Users { get; set; } = null!;
 
     // Questions
-    public DbSet<QuestionBase> Questions { get; set; } = null!;
+    public DbSet<BaseQuestion> Questions { get; set; } = null!;
     public DbSet<SingleChoiceQuestion> SingleChoiceQuestions { get; set; } = null!;
     public DbSet<MultipleChoiceQuestion> MultipleChoiceQuestions { get; set; } = null!;
     public DbSet<OpenTextQuestion> OpenTextQuestions { get; set; } = null!;
@@ -31,7 +31,7 @@ public class SurveyAppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        var dbSeeder = DbSeeder.GetInstance();
+        var dbSeeder = MockDataStorage.GetInstance();
         
         modelBuilder.Entity<User>()
             .HasMany(u => u.AccessibleSurveys)

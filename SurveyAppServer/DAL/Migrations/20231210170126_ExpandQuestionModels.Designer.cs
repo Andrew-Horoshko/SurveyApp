@@ -3,6 +3,7 @@ using System;
 using DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace SurveyAppServer.Migrations
 {
     [DbContext(typeof(SurveyAppDbContext))]
-    partial class SurveyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231210170126_ExpandQuestionModels")]
+    partial class ExpandQuestionModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.14");
@@ -26,7 +29,13 @@ namespace SurveyAppServer.Migrations
                     b.Property<bool>("IsCorrect")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("MultipleChoiceQuestionQuestionId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("QuestionId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("SingleChoiceQuestionQuestionId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Text")
@@ -35,7 +44,11 @@ namespace SurveyAppServer.Migrations
 
                     b.HasKey("AnswerId");
 
+                    b.HasIndex("MultipleChoiceQuestionQuestionId");
+
                     b.HasIndex("QuestionId");
+
+                    b.HasIndex("SingleChoiceQuestionQuestionId");
 
                     b.ToTable("Answers");
 
@@ -250,7 +263,7 @@ namespace SurveyAppServer.Migrations
                         new
                         {
                             SurveyAttemptId = 1,
-                            AttemptDate = new DateTime(2023, 12, 10, 18, 13, 53, 896, DateTimeKind.Local).AddTicks(4890),
+                            AttemptDate = new DateTime(2023, 12, 10, 18, 1, 26, 115, DateTimeKind.Local).AddTicks(1020),
                             SurveyId = 1,
                             UserId = 1
                         });
@@ -446,11 +459,19 @@ namespace SurveyAppServer.Migrations
 
             modelBuilder.Entity("Domain.Models.Answers.Answer", b =>
                 {
-                    b.HasOne("Domain.Models.Questions.BaseQuestion", "Question")
+                    b.HasOne("Domain.Models.Questions.MultipleChoiceQuestion", null)
                         .WithMany("Answers")
+                        .HasForeignKey("MultipleChoiceQuestionQuestionId");
+
+                    b.HasOne("Domain.Models.Questions.BaseQuestion", "Question")
+                        .WithMany()
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Domain.Models.Questions.SingleChoiceQuestion", null)
+                        .WithMany("Answers")
+                        .HasForeignKey("SingleChoiceQuestionQuestionId");
 
                     b.Navigation("Question");
                 });
@@ -557,11 +578,6 @@ namespace SurveyAppServer.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Domain.Models.Questions.BaseQuestion", b =>
-                {
-                    b.Navigation("Answers");
-                });
-
             modelBuilder.Entity("Domain.Models.Surveys.Survey", b =>
                 {
                     b.Navigation("Questions");
@@ -573,6 +589,16 @@ namespace SurveyAppServer.Migrations
             modelBuilder.Entity("Domain.Models.Surveys.SurveyAttempt", b =>
                 {
                     b.Navigation("SurveyAnswers");
+                });
+
+            modelBuilder.Entity("Domain.Models.Questions.MultipleChoiceQuestion", b =>
+                {
+                    b.Navigation("Answers");
+                });
+
+            modelBuilder.Entity("Domain.Models.Questions.SingleChoiceQuestion", b =>
+                {
+                    b.Navigation("Answers");
                 });
 #pragma warning restore 612, 618
         }

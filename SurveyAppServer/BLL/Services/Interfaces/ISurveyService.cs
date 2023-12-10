@@ -5,17 +5,25 @@ namespace BLL.Services;
 
 public interface ISurveyService
 {
-    Task<Survey> GetSurvey(int surveyId);
+    // CRUD
+    Task<Survey> CreateSurveyAsync(Survey survey);
     
-    Task<IEnumerable<Survey>> GetAllSurveys();
-
-    Task<IEnumerable<Survey>> GetUserSurveys(int userId);
-
-    Task AssignSurveyToUser(int userId, int surveyId);
-
-    Task<IEnumerable<QuestionBase>> GetSurveyQuestions(int surveyId);
+    Task<Survey> GetSurveyAsync(int surveyId);
     
-    Task<SurveyAttempt> GetSurveyAttempt(int surveyAttemptId);
+    Task UpdateSurveyAsync(Survey survey);
+    
+    Task DeleteSurveyAsync(int surveyId);
+    
+    // Business logic
+    Task<IEnumerable<Survey>> GetAllSurveysAsync();
 
-    Task<SurveyAttempt> SaveSurveyAttempt(SurveyAttempt surveyAttempt);
+    Task<IEnumerable<Survey>> GetUserSurveysAsync(int userId);
+
+    Task AssignSurveyToUserAsync(int userId, int surveyId);
+
+    Task<IEnumerable<BaseQuestion>> GetSurveyQuestionsAsync(int surveyId);
+    
+    Task<SurveyAttempt> GetSurveyAttemptAsync(int surveyAttemptId);
+
+    Task<SurveyAttempt> SaveSurveyAttemptAsync(SurveyAttempt surveyAttempt);
 }

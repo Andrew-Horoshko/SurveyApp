@@ -1,7 +1,7 @@
-﻿using DAL;
+﻿using BLL.Services.Interfaces;
 using Domain.Models.Surveys;
+
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace SurveyAppServer.Controllers
 {
@@ -9,80 +9,52 @@ namespace SurveyAppServer.Controllers
     [ApiController]
     public class RatingsController : ControllerBase
     {
-        private readonly SurveyAppDbContext _context;
+        private readonly ISurveyRatingService _surveyRatingService;
 
-        public RatingsController(SurveyAppDbContext context)
+        public RatingsController(ISurveyRatingService surveyRatingService)
         {
-            _context = context;
+            _surveyRatingService = surveyRatingService;
+        }
+        
+        // CRUD
+        [HttpGet]
+        public async Task<ActionResult<SurveyRating>> GetSurveyRating(int surveyRatingId)
+        {
+            var surveyRating = await _surveyRatingService.GetSurveyRatingAsync(surveyRatingId);
+
+            return Ok(surveyRating);
         }
 
-        [HttpPost("Submit")]
-        public async Task<ActionResult<SurveyRating>> SubmitRating(SurveyRating surveyRating)
+        [HttpPost]
+        public async Task<ActionResult<SurveyRating>> CreateSurveyRating(SurveyRating surveyRating)
         {
-            var existingRating = await _context.SurveyRatings
-                .FirstOrDefaultAsync(sr => sr.SurveyId == surveyRating.SurveyId && sr.UserId == surveyRating.UserId);
+            surveyRating = await _surveyRatingService.CreateSurveyRatingAsync(surveyRating);
 
-            if (existingRating != null)
-            {
-                existingRating.Mark = surveyRating.Mark;
-                _context.Entry(existingRating).State = EntityState.Modified;
-            }
-            else
-            {
-                _context.SurveyRatings.Add(surveyRating);
-            }
-
-            await _context.SaveChangesAsync();
-
-            UpdateAverageRating(surveyRating.SurveyId);
-
-            string getSurveyRatingName = nameof(GetSurveyRating);
-            return CreatedAtAction(getSurveyRatingName, new { id = surveyRating.SurveyRatingId }, surveyRating);
+            return Ok(surveyRating);
         }
 
-        private async Task<ActionResult<SurveyRating>> GetSurveyRating(int id)
+        [HttpPut]
+        public async Task<ActionResult> UpdateSurveyRating(SurveyRating surveyRating)
         {
-            var surveyRating = await _context.SurveyRatings.FindAsync(id);
+            await _surveyRatingService.UpdateSurveyRatingAsync(surveyRating);
 
-            if (surveyRating == null)
-            {
-                return NotFound();
-            }
+            return NoContent();
+        }
 
-            return surveyRating;
+        [HttpDelete]
+        public async Task<ActionResult> DeleteSurveyRating(int surveyRatingId)
+        {
+            await _surveyRatingService.DeleteSurveyRatingAsync(surveyRatingId);
+
+            return NoContent();
         }
 
         [HttpGet("AllRatings")]
         public async Task<ActionResult<IEnumerable<object>>> GetAllRatings()
         {
-            var ratings = await _context.SurveyRatings
-                .Include(r => r.Survey)
-                .Include(r => r.User)
-                .Select(r => new
-                {
-                    SurveyName = r.Survey.Title,
-                    UserName = r.User.Username,
-                    r.Mark
-                })
-                .ToListAsync();
+            var surveyRatings = await _surveyRatingService.GetAllSurveyRatingsAsync();
 
-            return ratings;
-        }
-
-        private void UpdateAverageRating(int surveyId)
-        {
-            var ratings = _context.SurveyRatings.Where(r => r.SurveyId == surveyId).ToList();
-            if (ratings.Any())
-            {
-                var averageRating = ratings.Average(r => (int) r.Mark);
-                var survey = _context.Surveys.Find(surveyId);
-                if (survey != null)
-                {
-                    survey.AverageRating = averageRating;
-                    _context.Entry(survey).State = EntityState.Modified;
-                    _context.SaveChanges();
-                }
-            }
+            return Ok(surveyRatings);
         }
     }
 }

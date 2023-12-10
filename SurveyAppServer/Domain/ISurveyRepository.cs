@@ -4,5 +4,5 @@ namespace Domain;
 
 public interface ISurveyRepository : IBaseRepository<Survey>
 {
-    Task<Survey?> GetByIdIncludeQuestions(int surveyId);
+    Task<Survey?> GetByIdIncludeQuestionsAsync(int surveyId);
 }

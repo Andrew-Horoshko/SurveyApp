@@ -11,6 +11,6 @@ public class SurveyAnswer
     public int QuestionId { get; set; }
     public int AnswerId { get; set; }
     public SurveyAttempt SurveyAttempt { get; set; } = null!;
-    public QuestionBase Question { get; set; } = null!;
+    public BaseQuestion Question { get; set; } = null!;
     public Answer Answer { get; set; } = null!;
 }

@@ -4,5 +4,5 @@ namespace Domain;
 
 public interface IUserManualRepository : IBaseRepository<UserManual>
 {
-    Task<UserManual?> GetBySurveyId(int surveyId);
+    Task<UserManual?> GetBySurveyIdAsync(int surveyId);
 }

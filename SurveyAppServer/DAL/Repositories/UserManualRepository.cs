@@ -9,7 +9,7 @@ public class UserManualRepository : BaseRepository<UserManual>, IUserManualRepos
 {
     public UserManualRepository(SurveyAppDbContext context) : base(context) { }
 
-    public async Task<UserManual?> GetBySurveyId(int surveyId)
+    public async Task<UserManual?> GetBySurveyIdAsync(int surveyId)
     {
         return await EntitySet.FirstOrDefaultAsync(um => um.SurveyId == surveyId);
     }

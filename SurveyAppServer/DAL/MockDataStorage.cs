@@ -1,3 +1,4 @@
+using Domain;
 using Domain.Models.Answers;
 using Domain.Models.Questions;
 using Domain.Models.Surveys;
@@ -5,16 +6,16 @@ using Domain.Models.Users;
 
 namespace DAL;
 
-public sealed class DbSeeder
+public sealed class MockDataStorage
 {
-    private static DbSeeder? _instance;
+    private static MockDataStorage? _instance;
 
-    public static DbSeeder GetInstance()
+    public static MockDataStorage GetInstance()
     {
-        return _instance ??= new DbSeeder();
+        return _instance ??= new MockDataStorage();
     }
     
-    private DbSeeder() {
+    private MockDataStorage() {
         SingleChoiceQuestions = new List<SingleChoiceQuestion>
         {
             new()
@@ -23,6 +24,7 @@ public sealed class DbSeeder
                 Text = "How many oceans are there?",
                 Tooltip = "This test aims to asses your memory (1)",
                 HasRightAnswer = true,
+                QuestionType = QuestionType.SingleChoice,
                 SurveyId = 1
             },
             new()
@@ -31,6 +33,7 @@ public sealed class DbSeeder
                 Text = "How many continents are there?",
                 Tooltip = "This test aims to asses your memory (2)",
                 HasRightAnswer = true,
+                QuestionType = QuestionType.SingleChoice,
                 SurveyId = 1
             }
         };
@@ -43,6 +46,7 @@ public sealed class DbSeeder
                 Text = "When do you feel most hungry?",
                 Tooltip = "This question helps to asses your digestion system's health",
                 HasRightAnswer = false,
+                QuestionType = QuestionType.MultipleChoice,
                 SurveyId = 1
             }
         };
@@ -55,6 +59,7 @@ public sealed class DbSeeder
                 Text = "Tell us about your before bed routine",
                 Tooltip = "This question aims to asses the quality of your sleep",
                 HasRightAnswer = false,
+                QuestionType = QuestionType.OpenText,
                 SurveyId = 1
             }
         };
