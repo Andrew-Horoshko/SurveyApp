@@ -8,11 +8,8 @@ const string allowSpecificOrigins = "_allowSpecificOrigins";
 
 var builder = WebApplication.CreateBuilder(args);
 
-<<<<<<< HEAD:SurveyAppServer/API/Program.cs
 ServicesConfiguration.Initialize(builder.Configuration);
 
-=======
->>>>>>> 48dd44cf4c2709ed83ff997ab4bdf880b812b488:SurveyAppServer/Program.cs
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: allowSpecificOrigins,
