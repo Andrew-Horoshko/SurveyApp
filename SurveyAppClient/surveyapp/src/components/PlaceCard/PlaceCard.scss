@@ -1,26 +1,11 @@
 .place__container {
     @include font($font-size: 1rem, $line-height: $line-height-sm, $color: $black);
-    @include set-size(40%, 150px);
+    @include set-size(40%, 130px);
     position: relative;
-    margin-bottom: 20px;
     padding: 7px 0px 0px 5px;
     background-color: $white;
     border-radius: 20px;
     overflow: hidden;
-    
-    @include screen-md(){
-        height: 320px
-    }
-
-    & img {
-      @include set-size(99%, 250px);
-      object-fit: contain;
-      border-radius: 20px;
-
-      @include screen-md(){
-        height: 200px
-        }
-    }
 }
 
 .place__name {
@@ -37,12 +22,12 @@
 }
 
 .start_button{
-    @include set-size(99%, 50px);
+    @include set-size(99%, 40px);
     background-color: rgb(0, 255, 128);
     @include font($font-size: 1rem, $line-height: $line-height-sm, $color: $black);
     border-radius: 20px;
     position: absolute;
-    bottom: 10px; 
+    top: 80px; 
     left: 50%; 
     transform: translateX(-50%);
 }

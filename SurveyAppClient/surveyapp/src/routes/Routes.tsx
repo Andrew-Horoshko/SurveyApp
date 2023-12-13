@@ -1,5 +1,5 @@
 import {Route, Switch, Redirect} from 'react-router-dom';
-import { PlacePage, HomePage, AccountPage } from '../pages';
+import { PlacePage, HomePage, AccountPage, DoctorPage, StrategyPage, AdminPage } from '../pages';
 import { SignInPage } from '../pages/SignInPage/SignInPage';
 import CompletedSurveysPage from '../pages/CompletedSurveysPage/CompletedSurveysPage';
 
@@ -12,6 +12,9 @@ const Routes = () => {
             <Route path="/home" render={() => <HomePage/>}/>
             <Route path="/sign-in" render={()=><SignInPage/>} />
             <Route path="/completed-surveys" render={()=><CompletedSurveysPage/>} />
+            <Route path="/strategy" render={()=><StrategyPage/>} />
+            <Route path="/users/doctor" render={()=><DoctorPage/>} />
+            <Route path="/users/admin" render={()=><AdminPage/>} />
         </Switch>
     );
 };

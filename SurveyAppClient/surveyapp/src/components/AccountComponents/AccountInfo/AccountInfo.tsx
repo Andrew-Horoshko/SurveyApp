@@ -11,14 +11,14 @@ export const AccountInfo: React.FC<UserInfoProps> = ({ given_name, family_name, 
     return (
         <div className="personalData">
             <div className="personalData__block">
-                <h3 className="personalData__title">{('personalData')}</h3>
+                <h3 className="personalData__title">Персональні дані</h3>
                 <ul className="personalData__list">
                     <li className="list__item">
                         <div className="list__item__icon">
                             <UserIcon />
                         </div>
                         <div className="item__data">
-                            <p className="underText">{('fullName')}</p>
+                            <p className="underText">Повне ім'я</p>
                             <p>{`${given_name} ${family_name}`}</p>
                         </div></li>
                     <li className="list__item">
@@ -26,7 +26,7 @@ export const AccountInfo: React.FC<UserInfoProps> = ({ given_name, family_name, 
                             <EmailIcon />
                         </div>
                         <div className="item__data">
-                            <p className="underText">{('email')}</p>
+                            <p className="underText">Пошта</p>
                             <p>{ email }</p>
                         </div>
                     </li>
