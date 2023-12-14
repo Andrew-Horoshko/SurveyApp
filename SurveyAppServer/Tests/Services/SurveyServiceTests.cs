@@ -12,7 +12,7 @@ namespace Tests.Services
     {
         private Mock<ISurveyRepository> _mockSurveyRepo;
         private Mock<IUserRepository> _mockUserRepo;
-        private Mock<IBaseRepository<SurveyAttempt>> _mockSurveyAttemptRepo;
+        private Mock<ISurveyAttemptRepository> _mockSurveyAttemptRepo;
         private SurveyService _service;
 
         [SetUp]
@@ -20,7 +20,7 @@ namespace Tests.Services
         {
             _mockSurveyRepo = new Mock<ISurveyRepository>();
             _mockUserRepo = new Mock<IUserRepository>();
-            _mockSurveyAttemptRepo = new Mock<IBaseRepository<SurveyAttempt>>();
+            _mockSurveyAttemptRepo = new Mock<ISurveyAttemptRepository>();
             _service = new SurveyService(_mockSurveyRepo.Object, _mockUserRepo.Object, _mockSurveyAttemptRepo.Object);
         }
 
