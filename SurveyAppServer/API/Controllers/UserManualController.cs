@@ -2,92 +2,105 @@
 using Domain.Models.Surveys;
 
 using System.Net.Mail;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using SurveyAppServer.ViewModels;
 
-namespace SurveyAppServer.Controllers
+namespace SurveyAppServer.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class UserManualController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class UserManualController : ControllerBase
+    private readonly IUserManualService _userManualService;
+    private readonly IMapper _mapper;
+
+    public UserManualController(IUserManualService userManualService, IMapper mapper)
     {
-        private readonly IUserManualService _userManualService;
+        _userManualService = userManualService;
+        _mapper = mapper;
+    }
 
-        public UserManualController(IUserManualService userManualService)
-        {
-            _userManualService = userManualService;
-        }
+    // CRUD
+    [HttpGet]
+    public async Task<ActionResult<UserManualViewModel>> GetUserManual(int userManualId)
+    {
+        var userManual = await _userManualService.GetUserManualAsync(userManualId);
 
-        // CRUD
-        [HttpGet]
-        public async Task<ActionResult<UserManual>> GetUserManual(int userManualId)
-        {
-            var userManual = await _userManualService.GetUserManualAsync(userManualId);
-
-            return Ok(userManual);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult<UserManual>> CreateUserManual(UserManual userManual)
-        {
-            userManual = await _userManualService.CreateUserManualAsync(userManual);
-
-            return Ok(userManual);
-        }
-
-        [HttpPut]
-        public async Task<ActionResult> UpdateUserManual(UserManual userManual)
-        {
-            await _userManualService.UpdateUserManualAsync(userManual);
-
-            return NoContent();
-        }
-
-        [HttpDelete]
-        public async Task<ActionResult> DeleteUserManual(int userManualId)
-        {
-            await _userManualService.DeleteUserManualAsync(userManualId);
-
-            return NoContent();
-        }
+        var userManualViewModel = _mapper.Map<UserManualViewModel>(userManual);
         
-        // Business logic
-        [HttpGet("SurveyManual/{surveyId}")]
-        public async Task<ActionResult<UserManual>> GetSurveyManual(int surveyId)
-        {
-            var surveyManual = await _userManualService.GetUserManualBySurveyIdAsync(surveyId);
+        return Ok(userManualViewModel);
+    }
 
-            return Ok(surveyManual);
+    [HttpPost]
+    public async Task<ActionResult<UserManualViewModel>> CreateUserManual(UserManualViewModel userManualViewModel)
+    {
+        var userManual = _mapper.Map<UserManual>(userManualViewModel);
+        
+        userManual = await _userManualService.CreateUserManualAsync(userManual);
+
+        userManualViewModel = _mapper.Map<UserManualViewModel>(userManual);
+        
+        return Ok(userManualViewModel);
+    }
+
+    [HttpPut]
+    public async Task<ActionResult> UpdateUserManual(UserManualViewModel userManualViewModel)
+    {
+        var userManual = _mapper.Map<UserManual>(userManualViewModel);
+        
+        await _userManualService.UpdateUserManualAsync(userManual);
+
+        return NoContent();
+    }
+
+    [HttpDelete]
+    public async Task<ActionResult> DeleteUserManual(int userManualId)
+    {
+        await _userManualService.DeleteUserManualAsync(userManualId);
+
+        return NoContent();
+    }
+        
+    // Business logic
+    [HttpGet("SurveyManual/{surveyId}")]
+    public async Task<ActionResult<UserManualViewModel>> GetSurveyManual(int surveyId)
+    {
+        var surveyManual = await _userManualService.GetUserManualBySurveyIdAsync(surveyId);
+
+        var surveyManualViewModel = _mapper.Map<UserManualViewModel>(surveyManual);
+        
+        return Ok(surveyManualViewModel);
+    }
+
+    [HttpPost("SendQuestion")]
+    public ActionResult SendQuestion(string userEmail, string question)
+    {
+        try
+        {
+            var smtpClient = new SmtpClient("smtp.example.com")
+            {
+                Port = 587,
+                Credentials = new System.Net.NetworkCredential("username@example.com", "password"),
+                EnableSsl = true,
+            };
+
+            var mailMessage = new MailMessage
+            {
+                From = new MailAddress("noreply@example.com"),
+                Subject = "User Question",
+                Body = $"From: {userEmail}\n\n{question}",
+                IsBodyHtml = false,
+            };
+            mailMessage.To.Add("support@example.com");
+
+            smtpClient.Send(mailMessage);
+
+            return Ok("Question sent successfully.");
         }
-
-        [HttpPost("SendQuestion")]
-        public ActionResult SendQuestion(string userEmail, string question)
+        catch (System.Exception ex)
         {
-            try
-            {
-                var smtpClient = new SmtpClient("smtp.example.com")
-                {
-                    Port = 587,
-                    Credentials = new System.Net.NetworkCredential("username@example.com", "password"),
-                    EnableSsl = true,
-                };
-
-                var mailMessage = new MailMessage
-                {
-                    From = new MailAddress("noreply@example.com"),
-                    Subject = "User Question",
-                    Body = $"From: {userEmail}\n\n{question}",
-                    IsBodyHtml = false,
-                };
-                mailMessage.To.Add("support@example.com");
-
-                smtpClient.Send(mailMessage);
-
-                return Ok("Question sent successfully.");
-            }
-            catch (System.Exception ex)
-            {
-                return StatusCode(500, "Failed to send the question.");
-            }
+            return StatusCode(500, "Failed to send the question.");
         }
     }
 }

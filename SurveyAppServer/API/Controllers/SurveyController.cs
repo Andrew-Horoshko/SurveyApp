@@ -1,102 +1,120 @@
 ﻿using BLL.Services;
 using Domain.Models.Questions;
 using Domain.Models.Surveys;
+using SurveyAppServer.ViewModels;
 
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
-namespace SurveyAppServer.Controllers
+namespace SurveyAppServer.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class SurveyController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class SurveyController : ControllerBase
+    private readonly ISurveyService _surveyService;
+    private readonly IMapper _mapper;
+
+    public SurveyController(ISurveyService surveyService, IMapper mapper)
     {
-        private readonly ISurveyService _surveyService;
-
-        public SurveyController(ISurveyService surveyService)
-        {
-            _surveyService = surveyService;
-        }
+        _surveyService = surveyService;
+        _mapper = mapper;
+    }
         
-        // CRUD
-        [HttpGet]
-        public async Task<ActionResult<Survey>> GetSurvey(int surveyId)
-        {
-            var survey = await _surveyService.GetSurveyAsync(surveyId);
+    // CRUD
+    [HttpGet]
+    public async Task<ActionResult<SurveyViewModel>> GetSurvey(int surveyId)
+    {
+        var survey = await _surveyService.GetSurveyAsync(surveyId);
 
-            return Ok(survey);
-        }
+        var surveyViewModel = _mapper.Map<SurveyViewModel>(survey);
+            
+        return Ok(surveyViewModel);
+    }
 
-        [HttpPost]
-        public async Task<ActionResult<Survey>> CreateSurvey(Survey survey)
-        {
-            survey = await _surveyService.CreateSurveyAsync(survey);
+    [HttpPost]
+    public async Task<ActionResult<SurveyViewModel>> CreateSurvey(Survey survey)
+    {
+        survey = await _surveyService.CreateSurveyAsync(survey);
+            
+        var surveyViewModel = _mapper.Map<SurveyViewModel>(survey);
+            
+        return Ok(surveyViewModel);
+    }
 
-            return Ok(survey);
-        }
+    [HttpPut]
+    public async Task<ActionResult> UpdateSurvey(SurveyViewModel surveyViewModel)
+    {
+        var survey = _mapper.Map<Survey>(surveyViewModel);
+            
+        await _surveyService.UpdateSurveyAsync(survey);
 
-        [HttpPut]
-        public async Task<ActionResult> UpdateSurvey(Survey survey)
-        {
-            await _surveyService.UpdateSurveyAsync(survey);
+        return NoContent();
+    }
 
-            return NoContent();
-        }
+    [HttpDelete]
+    public async Task<ActionResult> DeleteSurvey(int surveyId)
+    {
+        await _surveyService.DeleteSurveyAsync(surveyId);
 
-        [HttpDelete]
-        public async Task<ActionResult> DeleteSurvey(int surveyId)
-        {
-            await _surveyService.DeleteSurveyAsync(surveyId);
-
-            return NoContent();
-        }
+        return NoContent();
+    }
         
-        // Business logic
-        [HttpGet("AllSurveys")]
-        public async Task<ActionResult<IEnumerable<Survey>>> GetAllSurveys()
-        {
-            var surveys = await _surveyService.GetAllSurveysAsync();
+    // Business logic
+    [HttpGet("AllSurveys")]
+    public async Task<ActionResult<IEnumerable<SurveyViewModel>>> GetAllSurveys()
+    {
+        var surveys = await _surveyService.GetAllSurveysAsync();
 
-            return Ok(surveys);
-        }
+        var surveyViewModels = surveys.Select(s => _mapper.Map<SurveyViewModel>(s));
 
-        [HttpPost("AssignToUser")]
-        public async Task<IActionResult> AssignSurveyToUser(int userId, int surveyId)
-        {
-            await _surveyService.AssignSurveyToUserAsync(userId, surveyId);
+        return Ok(surveyViewModels);
+    }
 
-            return NoContent();
-        }
+    [HttpPost("AssignToUser")]
+    public async Task<IActionResult> AssignSurveyToUser(int userId, int surveyId)
+    {
+        await _surveyService.AssignSurveyToUserAsync(userId, surveyId);
 
-        [HttpGet("UserSurveys/{userId}")]
-        public async Task<ActionResult<IEnumerable<Survey>>> GetUserSurveys(int userId)
-        {
-            var userSurveys = await  _surveyService.GetUserSurveysAsync(userId);
+        return NoContent();
+    }
 
-            return Ok(userSurveys);
-        }
+    [HttpGet("UserSurveys/{userId}")]
+    public async Task<ActionResult<IEnumerable<SurveyViewModel>>> GetUserSurveys(int userId)
+    {
+        var userSurveys = await  _surveyService.GetUserSurveysAsync(userId);
 
-        [HttpGet("Questions/{surveyId}")]
-        public async Task<ActionResult<IEnumerable<BaseQuestion>>> GetSurveyQuestions(int surveyId)
-        {
-            var surveyQuestions = await _surveyService.GetSurveyQuestionsAsync(surveyId);
+        var userSurveyViewModels = userSurveys
+            .Select(s => _mapper.Map<SurveyViewModel>(s));
+            
+        return Ok(userSurveyViewModels);
+    }
 
-            return Ok(surveyQuestions);
-        }
+    [HttpGet("Questions/{surveyId}")]
+    public async Task<ActionResult<IEnumerable<BaseQuestion>>> GetSurveyQuestions(int surveyId)
+    {
+        var surveyQuestions = await _surveyService.GetSurveyQuestionsAsync(surveyId);
 
-        [HttpPost("SaveAttempt")]
-        public async Task<ActionResult<SurveyAttempt>> SaveSurveyAttempt(SurveyAttempt surveyAttempt)
-        {
-            surveyAttempt = await _surveyService.SaveSurveyAttemptAsync(surveyAttempt);
+        return Ok(surveyQuestions);
+    }
 
-            string getSurveyAttemptName = nameof(GetSurveyAttempt);
-            return CreatedAtAction(getSurveyAttemptName, new { id = surveyAttempt.SurveyAttemptId }, surveyAttempt);
-        }
+    [HttpPost("SaveAttempt")]
+    public async Task<ActionResult<SurveyAttemptViewModel>> SaveSurveyAttempt(SurveyAttemptViewModel surveyAttemptViewModel)
+    {
+        var surveyAttempt = _mapper.Map<SurveyAttempt>(surveyAttemptViewModel);
+            
+        surveyAttempt = await _surveyService.SaveSurveyAttemptAsync(surveyAttempt);
 
-        private async Task<ActionResult<SurveyAttempt>> GetSurveyAttempt(int surveyAttemptId)
-        {
-            var surveyAttempt = await _surveyService.GetSurveyAttemptAsync(surveyAttemptId);
+        string getSurveyAttemptName = nameof(GetSurveyAttempt);
+        return CreatedAtAction(getSurveyAttemptName, new { id = surveyAttempt.SurveyAttemptId }, surveyAttempt);
+    }
 
-            return Ok(surveyAttempt);
-        }
+    private async Task<ActionResult<SurveyAttemptViewModel>> GetSurveyAttempt(int surveyAttemptId)
+    {
+        var surveyAttempt = await _surveyService.GetSurveyAttemptAsync(surveyAttemptId);
+
+        var surveyAttemptViewModel = _mapper.Map<SurveyAttemptViewModel>(surveyAttempt);
+
+        return Ok(surveyAttemptViewModel);
     }
 }
