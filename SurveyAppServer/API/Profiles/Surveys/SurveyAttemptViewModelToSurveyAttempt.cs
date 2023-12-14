@@ -1,6 +1,13 @@
-namespace SurveyAppServer.Profiles;
+using AutoMapper;
+using Domain.Models.Surveys;
+using SurveyAppServer.ViewModels;
 
-public class SurveyAttemptViewModelToSurveyAttempt
+namespace SurveyAppServer.Profiles.Surveys;
+
+public class SurveyAttemptViewModelToSurveyAttempt : Profile
 {
-    
+    public SurveyAttemptViewModelToSurveyAttempt()
+    {
+        CreateMap<SurveyAttemptViewModel, SurveyAttempt>().ReverseMap();
+    }
 }

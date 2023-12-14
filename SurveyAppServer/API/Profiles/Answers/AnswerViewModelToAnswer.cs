@@ -1,8 +1,8 @@
 using AutoMapper;
 using Domain.Models.Answers;
-using SurveyAppServer.View_Models.Answers;
+using SurveyAppServer.ViewModels.Answers;
 
-namespace SurveyAppServer.Profiles;
+namespace SurveyAppServer.Profiles.Answers;
 
 public class AnswerViewModelToAnswer : Profile
 {

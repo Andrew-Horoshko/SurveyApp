@@ -1,13 +1,13 @@
 using AutoMapper;
 using Domain.Models.Surveys;
-using SurveyAppServer.View_Models;
+using SurveyAppServer.ViewModels;
 
-namespace SurveyAppServer.Profiles;
+namespace SurveyAppServer.Profiles.Surveys;
 
 public class SurveyAnswerViewModelToSurveyAnswer : Profile
 {
     public SurveyAnswerViewModelToSurveyAnswer()
     {
-        CreateMap<SurveyAnswerViewModel, SurveyAnswer>();
+        CreateMap<SurveyAnswerViewModel, SurveyAnswer>().ReverseMap();
     }
 }

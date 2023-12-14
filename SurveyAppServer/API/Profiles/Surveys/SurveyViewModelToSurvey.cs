@@ -1,6 +1,6 @@
 using AutoMapper;
 using Domain.Models.Surveys;
-using SurveyAppServer.View_Models;
+using SurveyAppServer.ViewModels;
 
 namespace SurveyAppServer.Profiles;
 

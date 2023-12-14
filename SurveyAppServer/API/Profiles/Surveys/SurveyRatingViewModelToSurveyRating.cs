@@ -1,6 +1,13 @@
-namespace SurveyAppServer.Profiles;
+using AutoMapper;
+using Domain.Models.Surveys;
+using SurveyAppServer.ViewModels;
 
-public class SurveyRatingViewModelToSurveyRating
+namespace SurveyAppServer.Profiles.Surveys;
+
+public class SurveyRatingViewModelToSurveyRating : Profile
 {
-    
+    public SurveyRatingViewModelToSurveyRating()
+    {
+        CreateMap<SurveyRatingViewModel, SurveyRating>().ReverseMap();
+    }
 }
