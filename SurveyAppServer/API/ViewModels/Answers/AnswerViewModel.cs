@@ -1,6 +1,6 @@
 using Domain.Models.Questions;
 
-namespace SurveyAppServer.View_Models.Answers;
+namespace SurveyAppServer.ViewModels.Answers;
 
 public class AnswerViewModel
 {

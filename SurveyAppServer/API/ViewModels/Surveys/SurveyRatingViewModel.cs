@@ -1,4 +1,4 @@
-﻿namespace SurveyAppServer.View_Models
+﻿namespace SurveyAppServer.ViewModels
 {
     public class SurveyRatingViewModel
     {
