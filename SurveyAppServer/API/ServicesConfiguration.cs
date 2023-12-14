@@ -3,7 +3,6 @@ using BLL.Services.Interfaces;
 using DAL;
 using DAL.Repositories;
 using Domain;
-using Domain.Models.Surveys;
 using SurveyAppServer.Profiles;
 using SurveyAppServer.Profiles.Answers;
 using SurveyAppServer.Profiles.Surveys;
@@ -27,7 +26,7 @@ public static class ServicesConfiguration
         
         // Repositories
         services.AddScoped<IBaseQuestionRepository, BaseQuestionRepository>();
-        services.AddScoped<IBaseRepository<SurveyAttempt>, BaseRepository<SurveyAttempt>>();
+        services.AddScoped<ISurveyAttemptRepository, SurveyAttemptRepository>();
         services.AddScoped<ISurveyRepository, SurveyRepository>();
         services.AddScoped<ISurveyRatingRepository, SurveyRatingRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
