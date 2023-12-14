@@ -3,14 +3,12 @@ import { GoogleLogin } from '@react-oauth/google';
 import useUser from '../../hooks/useUser';
 import jwt_decode from 'jwt-decode';
 import './SignInForm.scss';
-import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
 
 export const SignInForm: React.FC<{}> = ({ }) => {
   const [isFailed, setIsFailed] = React.useState(false);
 
   const { setUser } = useUser();
-  const { t } = useTranslation();
   const history = useHistory();
 
   const handleSuccess = (response) => {
@@ -25,7 +23,7 @@ export const SignInForm: React.FC<{}> = ({ }) => {
 
   return (
     <form className='signin-form'>
-      <h3 className='signin-form__header'>{t('signin')}</h3>
+      <h3 className='signin-form__header'>Виберіть аккаунт</h3>
       <GoogleLogin
         onSuccess={handleSuccess}
         onError={handleError}
@@ -38,11 +36,7 @@ export const SignInForm: React.FC<{}> = ({ }) => {
         shape='pill'
       />
       {isFailed &&
-        (<p className='signin-form__error'>
-          {
-            t('signinError')
-          }
-        </p>
+        (<p className='signin-form__error'>Помилка авторизації</p>
         )
       }
     </form>

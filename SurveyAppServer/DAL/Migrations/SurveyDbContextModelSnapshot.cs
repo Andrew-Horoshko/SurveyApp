@@ -166,7 +166,19 @@ namespace SurveyAppServer.Migrations
                         {
                             SurveyId = 1,
                             AverageRating = 2.3999999999999999,
-                            Title = "Mock survey"
+                            Title = "Опитування загальної якості життя"
+                        },
+                        new
+                        {
+                            SurveyId = 2,
+                            AverageRating = 3.6000000000000001,
+                            Title = "Опитування про суб'єктивне самопочуття"
+                        },
+                        new
+                        {
+                            SurveyId = 3,
+                            AverageRating = 0.0,
+                            Title = "Психологічне опитування"
                         });
                 });
 
@@ -250,7 +262,7 @@ namespace SurveyAppServer.Migrations
                         new
                         {
                             SurveyAttemptId = 1,
-                            AttemptDate = new DateTime(2023, 12, 10, 18, 13, 53, 896, DateTimeKind.Local).AddTicks(4890),
+                            AttemptDate = new DateTime(2023, 12, 14, 2, 4, 33, 551, DateTimeKind.Local).AddTicks(4035),
                             SurveyId = 1,
                             UserId = 1
                         });
@@ -356,6 +368,38 @@ namespace SurveyAppServer.Migrations
                             Password = "pass123",
                             Role = 0,
                             Username = "admin0"
+                        },
+                        new
+                        {
+                            UserId = 2,
+                            Email = "isaak@gmail.com",
+                            Password = "123456",
+                            Role = 1,
+                            Username = "Isaak Piterson"
+                        },
+                        new
+                        {
+                            UserId = 3,
+                            Email = "ivan@gmail.com",
+                            Password = "111111",
+                            Role = 2,
+                            Username = "Ivan Petryna"
+                        },
+                        new
+                        {
+                            UserId = 4,
+                            Email = "vasyl@gmail.com",
+                            Password = "111111",
+                            Role = 2,
+                            Username = "Vasyl Mok"
+                        },
+                        new
+                        {
+                            UserId = 5,
+                            Email = "oleg@gmail.com",
+                            Password = "111111",
+                            Role = 2,
+                            Username = "Oleg Birko"
                         });
                 });
 

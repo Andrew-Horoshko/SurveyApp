@@ -1,20 +1,35 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import './PlacesTable.scss'
-import PlaceCard, { FoodEstablishmentDataProps } from "../PlaceCard/PlaceCard";
+import { fetchSurveys } from '../../services/surveyService';
 
-interface PlacesTableProps {
-  places: FoodEstablishmentDataProps[];
-}
+import PlaceCard from "../PlaceCard/PlaceCard";
 
-const PlacesTable: React.FC<PlacesTableProps> = ({ places = [] }) => {
-  if (!places) return <div>Loading...</div>;
+const PlacesTable: React.FC = () => {
+
+  const [surveys, setSurveys] = useState<any[]>([]); 
+
+  useEffect(() => {
+    async function getSurveys() {
+      try {
+        const data = await fetchSurveys(); 
+        setSurveys(data); 
+      } catch (error) {
+        console.error('Error fetching surveys:', error);
+      }
+    }
+
+    getSurveys(); 
+  }, []);
+
+  if (!surveys) return <div>Загрузка...</div>;
+
   return (
     <div>
       <div className="places__table">
-        {places.map((item) => (
+        {surveys.map((survey ) => (
           <PlaceCard
-            key={item.id}
-            item={item}
+            key={survey.surveyid}
+            item={survey}
           />
         ))}
       </div>

@@ -1,69 +1,108 @@
-import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom'
 import { PageHeader } from "../../components/PageHeader";
-import { foodEstablishmentData } from "../../mocks";
 import './PlacePage.scss';
+import React, { useState, useEffect } from "react";
+import { useParams } from 'react-router-dom';
+import { getSurveyQuestions } from '../../services/SurveyQuestions';
+import { getAnswersForQuestion } from '../../services/Answer';
+import { Hint } from "../../components/Hint";
 
-export const PlacePage = () => {
-    const {id} = useParams<{ id: string }>();
-    const place = foodEstablishmentData.find(item => item.id === parseInt(id));
+export const PlacePage: React.FC = () => {
+    const { id } = useParams<{ id: string }>();
+    const [questions, setQuestions] = useState<any[]>([]);
+    const [answers, setAnswers] = useState<any[]>([]);
 
-    // State для питань та відповідей
-    const [questions, setQuestions] = useState<string[]>([]);
-    const [answers, setAnswers] = useState<string[]>([]);
-
-    // State для відображення вспливаючих вікон
-    const [showHints, setShowHints] = useState<boolean[]>([]);
-
-    // Функція завантаження питань та їх відображення
     useEffect(() => {
-        // Код для завантаження питань по ID місця
-        // Оновлення стану питань
-        // setQuestions([...loadedQuestions]);
-        // Ініціалізація пустих значень для відповідей
-        // setAnswers(Array(loadedQuestions.length).fill(''));
-        // Ініціалізація показу підказок для кожного питання
-        // setShowHints(Array(loadedQuestions.length).fill(false));
+        async function fetchQuestions() {
+            try {
+                const data = await getSurveyQuestions(parseInt(id));
+                setQuestions(data);
+            } catch (error) {
+                console.error('Error fetching questions:', error);
+            }
+        }
+
+        fetchQuestions();
     }, [id]);
 
-    // Функція для відображення підказки для певного питання
-    const toggleHint = (index: number) => {
-        const updatedShowHints = [...showHints];
-        updatedShowHints[index] = !updatedShowHints[index];
-        setShowHints(updatedShowHints);
-    };
+    useEffect(() => {
+        async function fetchAnswers(questionId: number) {
+            try {
+                const data = await getAnswersForQuestion(questionId);
+                setAnswers(prevAnswers => [...prevAnswers, ...data]);
+            } catch (error) {
+                console.error('Error fetching answers for question:', error);
+            }
+        }
+    
+        questions.forEach((question: any) => {
+            fetchAnswers(question.questionId);
+        });
+    }, [questions]);
 
-    // Функція для збереження відповідей
-    const saveAnswer = (index: number, answer: string) => {
-        const updatedAnswers = [...answers];
-        updatedAnswers[index] = answer;
-        setAnswers(updatedAnswers);
-    };
-
-    // Функція для обробки завершення проходження
-    const finishSurvey = () => {
-        // Логіка для обробки відправлення відповідей
+    const renderQuestion = (question: any) => {
+        let questionAnswers = answers.filter((answer: any) => answer.questionId === question.questionId);
+        
+        switch (question.questionType) {
+            case 'SingleChoice':
+                return (
+                    <div key={question.questionId} className="question-container">
+                        <div className="question-text">
+                            <span>{question.text}</span>
+                            <Hint  hint={question.tooltip} />
+                        </div>
+                        <div className="answers">
+                            {questionAnswers.map((answer: any) => (
+                                <label key={answer.answerId} className="answer-label">
+                                    <input type="radio" name={`question_${question.questionId}`} value={answer.text} />
+                                    <span className="answer-text">{answer.text}</span>
+                                </label>
+                            ))}
+                        </div>
+                    </div>
+                );
+            case 'MultipleChoice':
+                return (
+                    <div key={question.questionId} className="question-container">
+                        <div className="question-text">
+                            <span>{question.text}</span>
+                            <Hint  hint={question.tooltip} />
+                        </div>
+                        <div className="answers">
+                            {questionAnswers.map((answer: any) => (
+                                <label key={answer.answerId} className="answer-label">
+                                    <input type="checkbox" name={`question_${question.questionId}_${answer.text}`} value={answer.text} />
+                                    <span className="answer-text">{answer.text}</span>
+                                </label>
+                            ))}
+                        </div>
+                    </div>
+                );
+            case 'OpenAnswer':
+                return (
+                    <div key={question.questionId} className="question-container">
+                        <div className="question-text">
+                            <span>{question.text}</span>
+                            <Hint  hint={question.tooltip} />
+                        </div>
+                        <input type="text" name={`question_${question.questionId}_textInput`} className="open-answer-input" />
+                    </div>
+                );
+            default:
+                return null;
+        }
     };
 
     return (
         <>
-            <PageHeader headerText={place.name || 'Place Name'}/>
+            <PageHeader headerText={"Пройдіть опитування"} />
+            <h1 className="page-header">Питання для Survey {id}</h1>
             <div className="place-page">
-                {questions.map((question, index) => (
-                    <div key={index} className="question-container">
-                        <div className="question">
-                            <span>{question}</span>
-                            {/* Кнопка для відображення підказки */}
-                            <button onClick={() => toggleHint(index)}>Hint</button>
-                        </div>
-                        {/* Вікно з підказкою (відображається, якщо showHints[index] === true) */}
-                        {showHints[index] && <div className="hint">Hint text here</div>}
-                        {/* Поле для введення відповіді або вибору варіанту */}
-                        <input type="text" value={answers[index] || ''} onChange={(e) => saveAnswer(index, e.target.value)} />
-                    </div>
+                {questions.map((question: any) => (
+                    <React.Fragment key={question.questionId}>
+                        {renderQuestion(question)}
+                    </React.Fragment>
                 ))}
-                {/* Кнопка завершення проходження */}
-                <button onClick={finishSurvey}>Finish Survey</button>
+                <button className="finish_btn"/*onClick={finishSurvey}*/>Завершити опитування</button>
             </div>
         </>
     );

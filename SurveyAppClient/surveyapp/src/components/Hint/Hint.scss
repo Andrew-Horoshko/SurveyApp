@@ -1,0 +1,29 @@
+.hint-container {
+    position: relative;
+  }
+  
+  .hint-icon {
+    width: 16px;
+    height: 16px; 
+    margin-right: 5px; 
+  }
+  
+  .hint-question {
+    cursor: pointer;
+  }
+  
+  .hint-tooltip {
+    position: absolute;
+    top: 20px;
+    left: 10px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+    display: none;
+  }
+  
+  .hint-question:hover + .hint-tooltip {
+    display: block;
+  }
+  

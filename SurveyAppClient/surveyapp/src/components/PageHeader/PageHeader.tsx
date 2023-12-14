@@ -13,8 +13,9 @@ export const PageHeader: React.FC<PageHeaderProps> = ({headerText}) => {
         <header className='header'>
             <h2 className='header__title'>{headerText}</h2>
             <button onClick={() => history.goBack()} className='header__btnBack'>
-                <GoBackIcon/>
+            <GoBackIcon/>
             </button>
         </header>
     );
 };
+

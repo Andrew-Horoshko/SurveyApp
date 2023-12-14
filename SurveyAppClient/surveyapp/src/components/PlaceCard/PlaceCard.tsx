@@ -2,25 +2,31 @@ import React from "react";
 import { Link } from 'react-router-dom';
 import './PlaceCard.scss'
 
-export interface FoodEstablishmentDataProps {
-  id: number;
-  name: string;
-  description: string;
-  images: string[];
+export interface SurveyDataProps {
+  surveyId: number;
+  title: string;
+  averageRating: number;
+  userManualId: number;
 }
 
 interface PlaceCardProps {
-  item: FoodEstablishmentDataProps;
+  item: SurveyDataProps;
 }
 
 const PlaceCard: React.FC<PlaceCardProps> = ({ item }) => {
   return (
-    <Link key={item.id} to={`/place/${item.id}`} className="place__container">
-        <img className="place__photo" src={item.images[0]} alt={item.name} />
-        <p className="place__name">{item.name}</p>
-        <p className="place__description">{item.description}</p>
+    <div className="place__container">
+      <h3 className="place__name">{item.title}</h3>
+      <h5 className="place__rating">Рейтинг: {item.averageRating}</h5>
+
+      <Link key={item.surveyId} to={`/user-manual/${item.surveyId}`} >
+      <h5 className="get-manual">Отримати довідку</h5>
+      </Link>
+
+      <Link key={item.surveyId} to={`/place/${item.surveyId}`} >
         <button className="start_button">Почати опитування</button>
-    </Link>
+      </Link>
+    </div>
   );
 };
 

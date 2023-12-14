@@ -4,6 +4,8 @@
   box-sizing: border-box;
   border: none;
   cursor: pointer;
+  background-color: white;
+  color: black;
 
   &:hover &__icon-container {
     filter: brightness(1.3);
