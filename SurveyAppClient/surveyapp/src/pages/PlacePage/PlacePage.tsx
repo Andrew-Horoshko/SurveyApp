@@ -2,14 +2,29 @@ import { PageHeader } from "../../components/PageHeader";
 import './PlacePage.scss';
 import React, { useState, useEffect } from "react";
 import { useParams } from 'react-router-dom';
+import { getSurvey } from "../../services/surveyService";
 import { getSurveyQuestions } from '../../services/SurveyQuestions';
 import { getAnswersForQuestion } from '../../services/Answer';
 import { Hint } from "../../components/Hint";
 
 export const PlacePage: React.FC = () => {
+    const [survey, setSurvey] = useState<any>();
     const { id } = useParams<{ id: string }>();
     const [questions, setQuestions] = useState<any[]>([]);
     const [answers, setAnswers] = useState<any[]>([]);
+
+    useEffect(() => {
+        async function fetchSurvey() {
+            try {
+                const survey = await getSurvey(parseInt(id));
+                setSurvey(survey);
+            } catch (error) {
+                console.error("Error while fetching survey", error);
+            }
+        }
+
+        fetchSurvey();
+    }, [survey]);
 
     useEffect(() => {
         async function fetchQuestions() {
@@ -92,10 +107,12 @@ export const PlacePage: React.FC = () => {
         }
     };
 
+    if (!survey) return <div>Загрузка...</div>;
+
     return (
         <>
             <PageHeader headerText={"Пройдіть опитування"} />
-            <h1 className="page-header">Питання для Survey {id}</h1>
+            <h1 className="page-header">{survey.title}</h1>
             <div className="place-page">
                 {questions.map((question: any) => (
                     <React.Fragment key={question.questionId}>
