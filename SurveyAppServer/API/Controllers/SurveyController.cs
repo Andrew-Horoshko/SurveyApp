@@ -33,11 +33,13 @@ public class SurveyController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<SurveyViewModel>> CreateSurvey(Survey survey)
+    public async Task<ActionResult<SurveyViewModel>> CreateSurvey(SurveyViewModel surveyViewModel)
     {
+        var survey = _mapper.Map<Survey>(surveyViewModel);
+        
         survey = await _surveyService.CreateSurveyAsync(survey);
             
-        var surveyViewModel = _mapper.Map<SurveyViewModel>(survey);
+        surveyViewModel = _mapper.Map<SurveyViewModel>(survey);
             
         return Ok(surveyViewModel);
     }
@@ -102,16 +104,18 @@ public class SurveyController : ControllerBase
     public async Task<ActionResult<SurveyAttemptViewModel>> SaveSurveyAttempt(SurveyAttemptViewModel surveyAttemptViewModel)
     {
         var surveyAttempt = _mapper.Map<SurveyAttempt>(surveyAttemptViewModel);
-            
+        surveyAttempt.AttemptDate = DateTime.Now;
+
         surveyAttempt = await _surveyService.SaveSurveyAttemptAsync(surveyAttempt);
 
         string getSurveyAttemptName = nameof(GetSurveyAttempt);
         return CreatedAtAction(getSurveyAttemptName, new { id = surveyAttempt.SurveyAttemptId }, surveyAttempt);
     }
 
-    private async Task<ActionResult<SurveyAttemptViewModel>> GetSurveyAttempt(int surveyAttemptId)
+    [HttpGet("GetAttempt")]
+    public async Task<ActionResult<SurveyAttemptViewModel>> GetSurveyAttempt(int surveyAttemptId)
     {
-        var surveyAttempt = await _surveyService.GetSurveyAttemptAsync(surveyAttemptId);
+        var surveyAttempt = await _surveyService.GetSurveyAttemptIncludeAnswersAsync(surveyAttemptId);
 
         var surveyAttemptViewModel = _mapper.Map<SurveyAttemptViewModel>(surveyAttempt);
 
