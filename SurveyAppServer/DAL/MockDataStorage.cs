@@ -91,12 +91,46 @@ public sealed class MockDataStorage
                 Email = "admin0@admin.com",
                 Password = "pass123",
                 Role = UserRole.Admin
+            },
+            new()
+            {
+                UserId = 2,
+                Username = "Isaak Piterson",
+                Email = "isaak@gmail.com",
+                Password = "123456",
+                Role = UserRole.Doctor
+            },
+            new()
+            {
+                UserId = 3,
+                Username = "Ivan Petryna",
+                Email = "ivan@gmail.com",
+                Password = "111111",
+                Role = UserRole.Patient
+            },
+            new()
+            {
+                UserId = 4,
+                Username = "Vasyl Mok",
+                Email = "vasyl@gmail.com",
+                Password = "111111",
+                Role = UserRole.Patient
+            },
+            new()
+            {
+                UserId = 5,
+                Username = "Oleg Birko",
+                Email = "oleg@gmail.com",
+                Password = "111111",
+                Role = UserRole.Patient
             }
         };
         
         Surveys = new List<Survey>
         {
-            new() { SurveyId = 1, Title = "Mock survey", AverageRating = 2.4 }
+            new() { SurveyId = 1, Title = "Опитування загальної якості життя", AverageRating = 2.4 },
+            new() { SurveyId = 2, Title = "Опитування про суб'єктивне самопочуття", AverageRating = 3.6 },
+            new() { SurveyId = 3, Title = "Психологічне опитування", AverageRating = 0 }
         };
 
         SurveyAttempts = new List<SurveyAttempt>

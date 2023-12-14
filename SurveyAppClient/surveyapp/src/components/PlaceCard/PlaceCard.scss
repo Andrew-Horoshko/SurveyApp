@@ -1,8 +1,8 @@
 .place__container {
     @include font($font-size: 1rem, $line-height: $line-height-sm, $color: $black);
-    @include set-size(40%, 130px);
+    @include set-size(100%, 200px);
     position: relative;
-    padding: 7px 0px 0px 5px;
+    padding: 10px 0px 0px 15px;
     background-color: $white;
     border-radius: 20px;
     overflow: hidden;
@@ -22,12 +22,12 @@
 }
 
 .start_button{
-    @include set-size(99%, 40px);
-    background-color: rgb(0, 255, 128);
+    @include set-size(300px, 40px);
+    background-color: rgb(0, 174, 255);
     @include font($font-size: 1rem, $line-height: $line-height-sm, $color: $black);
     border-radius: 20px;
-    position: absolute;
-    top: 80px; 
-    left: 50%; 
+    position: relative;
+    top: 85px;
+    left: 150px; 
     transform: translateX(-50%);
 }
