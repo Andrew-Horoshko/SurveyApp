@@ -1,60 +1,74 @@
 ﻿using BLL.Services.Interfaces;
 using Domain.Models.Surveys;
+using SurveyAppServer.ViewModels;
 
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
-namespace SurveyAppServer.Controllers
+namespace SurveyAppServer.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class RatingsController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class RatingsController : ControllerBase
+    private readonly ISurveyRatingService _surveyRatingService;
+    private readonly IMapper _mapper;
+
+    public RatingsController(ISurveyRatingService surveyRatingService, IMapper mapper)
     {
-        private readonly ISurveyRatingService _surveyRatingService;
-
-        public RatingsController(ISurveyRatingService surveyRatingService)
-        {
-            _surveyRatingService = surveyRatingService;
-        }
+        _surveyRatingService = surveyRatingService;
+        _mapper = mapper;
+    }
         
-        // CRUD
-        [HttpGet]
-        public async Task<ActionResult<SurveyRating>> GetSurveyRating(int surveyRatingId)
-        {
-            var surveyRating = await _surveyRatingService.GetSurveyRatingAsync(surveyRatingId);
+    // CRUD
+    [HttpGet]
+    public async Task<ActionResult<SurveyRatingViewModel>> GetSurveyRating(int surveyRatingId)
+    {
+        var surveyRating = await _surveyRatingService.GetSurveyRatingAsync(surveyRatingId);
 
-            return Ok(surveyRating);
-        }
+        var surveyRatingViewModel = _mapper.Map<SurveyRatingViewModel>(surveyRating);
 
-        [HttpPost]
-        public async Task<ActionResult<SurveyRating>> CreateSurveyRating(SurveyRating surveyRating)
-        {
-            surveyRating = await _surveyRatingService.CreateSurveyRatingAsync(surveyRating);
+        return Ok(surveyRatingViewModel);
+    }
 
-            return Ok(surveyRating);
-        }
+    [HttpPost]
+    public async Task<ActionResult<SurveyRatingViewModel>> CreateSurveyRating(SurveyRatingViewModel surveyRatingViewModel)
+    {
+        var surveyRating = _mapper.Map<SurveyRating>(surveyRatingViewModel);
+        
+        surveyRating = await _surveyRatingService.CreateSurveyRatingAsync(surveyRating);
 
-        [HttpPut]
-        public async Task<ActionResult> UpdateSurveyRating(SurveyRating surveyRating)
-        {
-            await _surveyRatingService.UpdateSurveyRatingAsync(surveyRating);
+        surveyRatingViewModel = _mapper.Map<SurveyRatingViewModel>(surveyRating);
+        
+        return Ok(surveyRatingViewModel);
+    }
 
-            return NoContent();
-        }
+    [HttpPut]
+    public async Task<ActionResult> UpdateSurveyRating(SurveyRatingViewModel surveyRatingViewModel)
+    {
+        var surveyRating = _mapper.Map<SurveyRating>(surveyRatingViewModel);
+        
+        await _surveyRatingService.UpdateSurveyRatingAsync(surveyRating);
 
-        [HttpDelete]
-        public async Task<ActionResult> DeleteSurveyRating(int surveyRatingId)
-        {
-            await _surveyRatingService.DeleteSurveyRatingAsync(surveyRatingId);
+        return NoContent();
+    }
 
-            return NoContent();
-        }
+    [HttpDelete]
+    public async Task<ActionResult> DeleteSurveyRating(int surveyRatingId)
+    {
+        await _surveyRatingService.DeleteSurveyRatingAsync(surveyRatingId);
 
-        [HttpGet("AllRatings")]
-        public async Task<ActionResult<IEnumerable<object>>> GetAllRatings()
-        {
-            var surveyRatings = await _surveyRatingService.GetAllSurveyRatingsAsync();
+        return NoContent();
+    }
 
-            return Ok(surveyRatings);
-        }
+    [HttpGet("AllRatings")]
+    public async Task<ActionResult<IEnumerable<SurveyRatingViewModel>>> GetAllRatings()
+    {
+        var surveyRatings = await _surveyRatingService.GetAllSurveyRatingsAsync();
+
+        var surveyRatingViewModels = surveyRatings
+            .Select(s => _mapper.Map<SurveyRatingViewModel>(s));
+        
+        return Ok(surveyRatingViewModels);
     }
 }

@@ -1,5 +1,7 @@
 using BLL.Services.Interfaces;
-using Domain.Models.Answers;
+using SurveyAppServer.ViewModels.Answers;
+
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace SurveyAppServer.Controllers;
@@ -7,18 +9,22 @@ namespace SurveyAppServer.Controllers;
 public class QuestionController : ControllerBase
 {
     private readonly IQuestionBaseService _questionBaseService;
+    private readonly IMapper _mapper;
 
-    public QuestionController(IQuestionBaseService questionBaseService)
+    public QuestionController(IQuestionBaseService questionBaseService, IMapper mapper)
     {
         _questionBaseService = questionBaseService;
+        _mapper = mapper;
     }
 
     [HttpGet("Answers")]
-    public async Task<ActionResult<IEnumerable<Answer>>> GetAnswers(int questionId)
+    public async Task<ActionResult<IEnumerable<AnswerViewModel>>> GetAnswers(int questionId)
     {
         var answers = await _questionBaseService.GetQuestionAnswersAsync(questionId);
 
-        return Ok(answers);
+        var answerViewModels = answers.Select(a => _mapper.Map<AnswerViewModel>(a));
+        
+        return Ok(answerViewModels);
     }
 
     [HttpGet("Description")]

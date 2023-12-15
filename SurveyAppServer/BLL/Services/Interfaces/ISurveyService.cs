@@ -23,7 +23,7 @@ public interface ISurveyService
 
     Task<IEnumerable<BaseQuestion>> GetSurveyQuestionsAsync(int surveyId);
     
-    Task<SurveyAttempt> GetSurveyAttemptAsync(int surveyAttemptId);
+    Task<SurveyAttempt> GetSurveyAttemptIncludeAnswersAsync(int surveyAttemptId);
 
     Task<SurveyAttempt> SaveSurveyAttemptAsync(SurveyAttempt surveyAttempt);
 }

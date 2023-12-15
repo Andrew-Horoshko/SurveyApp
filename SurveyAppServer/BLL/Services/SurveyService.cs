@@ -14,12 +14,12 @@ public class SurveyService : ISurveyService
     
     private readonly ISurveyRepository _surveyRepository;
     private readonly IUserRepository _userRepository;
-    private readonly IBaseRepository<SurveyAttempt> _surveyAttemptRepository;
+    private readonly ISurveyAttemptRepository _surveyAttemptRepository;
 
     public SurveyService(
         ISurveyRepository surveyRepository, 
         IUserRepository userRepository,
-        IBaseRepository<SurveyAttempt> surveyAttemptRepository)
+        ISurveyAttemptRepository surveyAttemptRepository)
     {
         _surveyRepository = surveyRepository;
         _userRepository = userRepository;
@@ -102,9 +102,9 @@ public class SurveyService : ISurveyService
         return survey.Questions;
     }
 
-    public async Task<SurveyAttempt> GetSurveyAttemptAsync(int surveyAttemptId)
+    public async Task<SurveyAttempt> GetSurveyAttemptIncludeAnswersAsync(int surveyAttemptId)
     {
-        var surveyAttempt = await _surveyAttemptRepository.GetByIdAsync(surveyAttemptId);
+        var surveyAttempt = await _surveyAttemptRepository.GetByIdIncludeAnswersAsync(surveyAttemptId);
         
         if (surveyAttempt == null)
         {
