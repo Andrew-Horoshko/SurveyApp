@@ -22,10 +22,10 @@ export const PlacePage: React.FC = () => {
                 console.error("Error while fetching survey", error);
             }
         }
-
+    
         fetchSurvey();
-    }, [survey]);
-
+    }, [id]);
+    
     useEffect(() => {
         async function fetchQuestions() {
             try {
@@ -35,23 +35,25 @@ export const PlacePage: React.FC = () => {
                 console.error('Error fetching questions:', error);
             }
         }
-
+    
         fetchQuestions();
     }, [id]);
-
+    
     useEffect(() => {
-        async function fetchAnswers(questionId: number) {
+        async function fetchAnswersForAllQuestions() {
             try {
-                const data = await getAnswersForQuestion(questionId);
-                setAnswers(prevAnswers => [...prevAnswers, ...data]);
+                for (const question of questions) {
+                    const data = await getAnswersForQuestion(question.questionId);
+                    setAnswers(prevAnswers => [...prevAnswers, ...data]);
+                }
             } catch (error) {
-                console.error('Error fetching answers for question:', error);
+                console.error('Error fetching answers for questions:', error);
             }
         }
     
-        questions.forEach((question: any) => {
-            fetchAnswers(question.questionId);
-        });
+        if (questions.length > 0) {
+            fetchAnswersForAllQuestions();
+        }
     }, [questions]);
 
     const renderQuestion = (question: any) => {
