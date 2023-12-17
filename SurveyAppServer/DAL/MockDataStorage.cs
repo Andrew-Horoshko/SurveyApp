@@ -1,4 +1,5 @@
 using Domain;
+using Domain.Models;
 using Domain.Models.Answers;
 using Domain.Models.Questions;
 using Domain.Models.Surveys;
@@ -167,6 +168,19 @@ public sealed class MockDataStorage
                 SurveyId = 1
             }
         };
+
+        TreatmentStrategies = new List<TreatmentStrategy>
+        {
+            new()
+            {
+                TreatmentStrategyId = 1,
+                Diagnosis = "Cold",
+                Treatment = "Drink plenty of teas",
+                Recomendation = "Keep yourself warm",
+                PatientId = 3,
+                DoctorId = 2
+            }
+        };
     }
 
     // Questions
@@ -185,4 +199,7 @@ public sealed class MockDataStorage
     
     // Users
     public IList<User> Users { get; private set; }
+    
+    // Treatment strategies
+    public IList<TreatmentStrategy> TreatmentStrategies { get; private set; }
 }
