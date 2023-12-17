@@ -12,7 +12,7 @@ export const PlacePage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [questions, setQuestions] = useState<any[]>([]);
     const [answers, setAnswers] = useState<any[]>([]);
-    const [userAnswers, setUserAnswers] = useState<SurveyAnswer[]>([]);
+    const [userAnswers, setUserAnswers] = useState<{ [key: number]: SurveyAnswer[] }>({});
 
     useEffect(() => {
         const fetchSurvey = async () => {
@@ -74,10 +74,24 @@ export const PlacePage: React.FC = () => {
         }
 
         setUserAnswers(prevAnswers => {
-            const updatedAnswers = [...prevAnswers.filter(a => a.questionId !== questionId)];
+            const updatedAnswers = { ...prevAnswers };
 
-            if (checked || value) {
-                updatedAnswers.push(userAnswer);
+            if (!updatedAnswers[questionId]) {
+                updatedAnswers[questionId] = [];
+            }
+
+            if (questionType === 'MultipleChoice') {
+                const index = updatedAnswers[questionId].findIndex(
+                    (answer: SurveyAnswer) => answer.answerId === answerId
+                );
+
+                if (checked && index === -1) {
+                    updatedAnswers[questionId].push(userAnswer);
+                } else if (!checked && index !== -1) {
+                    updatedAnswers[questionId].splice(index, 1);
+                }
+            } else {
+                updatedAnswers[questionId] = [userAnswer];
             }
 
             return updatedAnswers;
@@ -89,7 +103,7 @@ export const PlacePage: React.FC = () => {
             surveyAttemptId: 0,
             userId: 1, // Replace with actual user ID
             surveyId: id,
-            surveyAnswers: userAnswers,
+            surveyAnswers: Object.values(userAnswers).flat(),
         };
 
         submitSurveyAttempt(surveyAttempt)
