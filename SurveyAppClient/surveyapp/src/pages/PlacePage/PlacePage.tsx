@@ -2,7 +2,7 @@ import { PageHeader } from "../../components/PageHeader";
 import './PlacePage.scss';
 import React, { useState, useEffect } from "react";
 import { useParams } from 'react-router-dom';
-import { getSurvey } from "../../services/surveyService";
+import { getSurvey, submitSurveyAttempt } from "../../services/surveyService";
 import { getSurveyQuestions } from '../../services/SurveyQuestions';
 import { getAnswersForQuestion } from '../../services/Answer';
 import { Hint } from "../../components/Hint";
@@ -12,6 +12,69 @@ export const PlacePage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [questions, setQuestions] = useState<any[]>([]);
     const [answers, setAnswers] = useState<any[]>([]);
+
+    const [userAnswers, setUserAnswers] = useState<SurveyAnswer[]>([]);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+
+        // Parse data from input name
+        const { name, value } = e.target;
+        const identifiers: string[] = name.split(/[q_a]+/);
+        console.log(name);
+        console.log(identifiers);
+        const questionType: string = identifiers[0];
+        const questionId: number = parseInt(identifiers[1]);
+        const answerId: number = parseInt(identifiers[2]);
+
+        // Create new user answer entry
+        const userAnswer: SurveyAnswer = {
+            surveyAnswerId: 0,
+            surveyAttemptId: 0,
+            questionId: questionId,
+            answerId: answerId,
+        };
+        if (value) {
+            userAnswer.openAnswer = value;
+        }
+
+        // Update user answers state
+        setUserAnswers(prevData => {
+
+            // Handle checkbox input
+            if (questionType == 'm') {
+                const prevAnswerIndex = prevData.findIndex(a => 
+                    a.questionId == userAnswer.questionId && 
+                    a.answerId == userAnswer.answerId);
+                if (prevAnswerIndex == -1) {
+                    prevData.push(userAnswer);
+                }
+
+                return prevData;
+            }
+
+            // Handle radiobutton/text input
+            const prevAnswerIndex = prevData.findIndex(a => a.questionId == userAnswer.questionId);
+            if (prevAnswerIndex != -1) {
+                prevData.splice(prevAnswerIndex, 1);
+            }
+            prevData.push(userAnswer);
+
+            return prevData;
+        });
+
+        console.log(userAnswers);
+    }
+
+    function submitSurvey() {
+        const surveyAttempt: SurveyAttempt = {
+            surveyAttemptId: 0,
+            userId: 1, // TODO: pass actual user id
+            surveyId: id,
+            surveyAnswers: userAnswers
+        };
+
+        submitSurveyAttempt(surveyAttempt);
+    }
 
     useEffect(() => {
         async function fetchSurvey() {
@@ -68,7 +131,8 @@ export const PlacePage: React.FC = () => {
                         <div className="answers">
                             {questionAnswers.map((answer: any) => (
                                 <label key={answer.answerId} className="answer-label">
-                                    <input type="radio" name={`question_${question.questionId}`} value={answer.text} />
+                                    <input type="radio" name={`s_q${question.questionId}_a${answer.answerId}`} value={answer.text} 
+                                        onChange={handleChange} />
                                     <span className="answer-text">{answer.text}</span>
                                 </label>
                             ))}
@@ -85,7 +149,8 @@ export const PlacePage: React.FC = () => {
                         <div className="answers">
                             {questionAnswers.map((answer: any) => (
                                 <label key={answer.answerId} className="answer-label">
-                                    <input type="checkbox" name={`question_${question.questionId}_${answer.text}`} value={answer.text} />
+                                    <input type="checkbox" name={`m_q${question.questionId}_a${answer.answerId}`} value={answer.text} 
+                                        onChange={handleChange} />
                                     <span className="answer-text">{answer.text}</span>
                                 </label>
                             ))}
@@ -99,7 +164,8 @@ export const PlacePage: React.FC = () => {
                             <span>{question.text}</span>
                             <Hint  hint={question.tooltip} />
                         </div>
-                        <input type="text" name={`question_${question.questionId}_textInput`} className="open-answer-input" />
+                        <input type="text" name={`o_q${question.questionId}_a1`} className="open-answer-input" 
+                            onChange={handleChange} />
                     </div>
                 );
             default:
@@ -119,7 +185,7 @@ export const PlacePage: React.FC = () => {
                         {renderQuestion(question)}
                     </React.Fragment>
                 ))}
-                <button className="finish_btn"/*onClick={finishSurvey}*/>Завершити опитування</button>
+                <button className="finish_btn" onClick={submitSurvey}>Завершити опитування</button>
             </div>
         </>
     );
