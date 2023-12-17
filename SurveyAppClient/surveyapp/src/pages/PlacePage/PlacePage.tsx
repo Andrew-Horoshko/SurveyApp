@@ -37,7 +37,7 @@ export const PlacePage: React.FC = () => {
         };
         fetchQuestions();
     }, [id]);
-
+    
     useEffect(() => {
         const fetchAnswers = async () => {
             try {
