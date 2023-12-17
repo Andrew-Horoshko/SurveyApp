@@ -12,15 +12,15 @@ namespace Tests.Services
         public class QuestionBaseServiceTests
         {
             private Mock<IBaseQuestionRepository> _mockRepo;
-            private Mock<ILogger<QuestionBaseService>> _mockLogger;
-            private QuestionBaseService _service;
+            private Mock<ILogger<BaseQuestionService>> _mockLogger;
+            private BaseQuestionService _service;
 
             [SetUp]
             public void Setup()
             {
                 _mockRepo = new Mock<IBaseQuestionRepository>();
-                _mockLogger = new Mock<ILogger<QuestionBaseService>>();
-                _service = new QuestionBaseService(_mockRepo.Object, _mockLogger.Object);
+                _mockLogger = new Mock<ILogger<BaseQuestionService>>();
+                _service = new BaseQuestionService(_mockRepo.Object, _mockLogger.Object);
             }
 
             [Test]
