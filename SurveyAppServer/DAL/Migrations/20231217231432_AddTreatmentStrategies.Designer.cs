@@ -3,6 +3,7 @@ using System;
 using DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace SurveyAppServer.Migrations
 {
     [DbContext(typeof(SurveyAppDbContext))]
-    partial class SurveyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231217231432_AddTreatmentStrategies")]
+    partial class AddTreatmentStrategies
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.14");
@@ -262,7 +265,7 @@ namespace SurveyAppServer.Migrations
                         new
                         {
                             SurveyAttemptId = 1,
-                            AttemptDate = new DateTime(2023, 12, 18, 0, 21, 21, 467, DateTimeKind.Local).AddTicks(5920),
+                            AttemptDate = new DateTime(2023, 12, 18, 0, 14, 32, 14, DateTimeKind.Local).AddTicks(4370),
                             SurveyId = 1,
                             UserId = 1
                         });
@@ -351,7 +354,7 @@ namespace SurveyAppServer.Migrations
                     b.Property<int>("PatientId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Recommendation")
+                    b.Property<string>("Recomendation")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -374,7 +377,7 @@ namespace SurveyAppServer.Migrations
                             Diagnosis = "Cold",
                             DoctorId = 2,
                             PatientId = 3,
-                            Recommendation = "Keep yourself warm",
+                            Recomendation = "Keep yourself warm",
                             Treatment = "Drink plenty of teas"
                         });
                 });

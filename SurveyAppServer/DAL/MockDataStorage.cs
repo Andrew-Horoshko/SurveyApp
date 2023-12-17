@@ -176,7 +176,7 @@ public sealed class MockDataStorage
                 TreatmentStrategyId = 1,
                 Diagnosis = "Cold",
                 Treatment = "Drink plenty of teas",
-                Recomendation = "Keep yourself warm",
+                Recommendation = "Keep yourself warm",
                 PatientId = 3,
                 DoctorId = 2
             }
