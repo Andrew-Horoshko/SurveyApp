@@ -40,7 +40,7 @@ export const HomePageHeader: React.FC = () => {
                 <div className="header__username">{greeting}</div>
             </div>
             <button className="view-surveys-button" onClick={onViewSurveysClick}>
-                    Завершені опитування
+                    Завершені опитування  
             </button>
         </header>
 

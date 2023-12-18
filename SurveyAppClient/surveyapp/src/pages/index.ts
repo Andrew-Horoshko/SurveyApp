@@ -5,3 +5,4 @@ export * from './SignInPage';
 export * from './DoctorPage';
 export * from './StrategyPage';
 export * from './AdminPage'
+export * from './UserManualPage'

@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
 import './PlaceCard.scss'
+import { Hint } from "../Hint";
+import { getUserManual } from "../../services/UserManual";
 
 export interface SurveyDataProps {
   surveyId: number;
@@ -14,14 +16,31 @@ interface PlaceCardProps {
 }
 
 const PlaceCard: React.FC<PlaceCardProps> = ({ item }) => {
+  const [userManualContent, setUserManualContent] = useState('');
+
+  useEffect(() => {
+    async function fetchUserManualContent() {
+      try {
+        const userManual = await getUserManual(item.surveyId);
+        setUserManualContent(userManual.content);
+      } catch (error) {
+        console.error('Error fetching user manual:', error);
+      }
+    }
+
+    fetchUserManualContent();
+  }, [item.userManualId]);
+
   return (
     <div className="place__container">
-      <h3 className="place__name">{item.title}</h3>
-      <h5 className="place__rating">Рейтинг: {item.averageRating.toFixed(1)}</h5>
 
-      <Link key={item.surveyId} to={`/user-manual/${item.surveyId}`} >
-      <h5 className="get-manual">Отримати довідку</h5>
-      </Link>
+      <div className="place__info">
+        <h3 className="place__name">{item.title}</h3>
+        <Hint hint={userManualContent} />
+      </div>
+  
+      <h5 className="place__rating">Рейтинг: {item.averageRating}</h5>
+
 
       <Link key={item.surveyId} to={`/place/${item.surveyId}`} >
         <button className="start_button">Почати опитування</button>
