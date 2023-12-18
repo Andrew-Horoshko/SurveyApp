@@ -1,5 +1,3 @@
-using Domain.Models.Questions;
-
 namespace SurveyAppServer.ViewModels.Answers;
 
 public class AnswerViewModel

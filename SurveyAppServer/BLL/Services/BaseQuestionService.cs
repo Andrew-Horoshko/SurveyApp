@@ -8,22 +8,22 @@ using Microsoft.Extensions.Logging;
 
 namespace BLL.Services;
 
-public class QuestionBaseService : IQuestionBaseService
+public class BaseQuestionService : IBaseQuestionService
 {
     private const string QuestionTarget = "Question";
 
     private readonly IBaseQuestionRepository _baseQuestionRepository;
     private readonly ILogger _logger;
 
-    public QuestionBaseService(
+    public BaseQuestionService(
         IBaseQuestionRepository baseQuestionRepository,
-        ILogger<QuestionBaseService> logger)
+        ILogger<BaseQuestionService> logger)
     {
         _baseQuestionRepository = baseQuestionRepository;
         _logger = logger;
     }
 
-    private async Task<BaseQuestion?> GetBaseQuestion(int questionId)
+    public async Task<BaseQuestion> GetQuestionAsync(int questionId)
     {
         var question = await _baseQuestionRepository.GetByIdIncludeAnswersAsync(questionId);
 
@@ -38,22 +38,37 @@ public class QuestionBaseService : IQuestionBaseService
             QuestionType.MultipleChoice => question as MultipleChoiceQuestion,
             QuestionType.OpenText => question as OpenTextQuestion,
             _ => question
-        };
+        } ?? question;
     }
-    
+
+    public async Task<BaseQuestion> CreateQuestionAsync(BaseQuestion baseQuestion)
+    {
+        return await _baseQuestionRepository.CreateAsync(baseQuestion);
+    }
+
+    public async Task UpdateQuestionAsync(BaseQuestion baseQuestion)
+    {
+        await _baseQuestionRepository.UpdateAsync(baseQuestion);
+    }
+
+    public async Task DeleteQuestionAsync(int questionId)
+    {
+        await _baseQuestionRepository.DeleteAsync(questionId);
+    }
+
     public async Task<IEnumerable<Answer>> GetQuestionAnswersAsync(int questionId)
     {
-        var question = await GetBaseQuestion(questionId);
+        var question = await GetQuestionAsync(questionId);
         
         _logger.LogInformation("Queried answers for:\n{q}", question);
 
-        return question!.Answers;
+        return question.Answers;
     }
 
     public async Task<string> GetQuestionDescriptionAsync(int questionId)
     {
-        var question = await GetBaseQuestion(questionId);
+        var question = await GetQuestionAsync(questionId);
 
-        return question!.GetDescription();
+        return question.GetDescription();
     }
 }

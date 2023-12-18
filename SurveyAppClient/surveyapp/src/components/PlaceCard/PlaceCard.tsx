@@ -33,12 +33,14 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ item }) => {
 
   return (
     <div className="place__container">
+
       <div className="place__info">
         <h3 className="place__name">{item.title}</h3>
         <Hint hint={userManualContent} />
       </div>
   
       <h5 className="place__rating">Рейтинг: {item.averageRating}</h5>
+
 
       <Link key={item.surveyId} to={`/place/${item.surveyId}`} >
         <button className="start_button">Почати опитування</button>

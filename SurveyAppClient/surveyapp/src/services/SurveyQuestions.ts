@@ -9,3 +9,12 @@ export const getSurveyQuestions = async (surveyId: number) => {
         throw new Error('Failed to fetch survey questions');
     }
 };
+
+export const addQuestion = async (questionData) => {
+    try {
+      const response = await api.post('/api/Question', questionData);
+      console.log('Question add successfully:', response.data);
+    } catch (error) {
+      console.error('Error sending Question:', error);
+    }
+  };

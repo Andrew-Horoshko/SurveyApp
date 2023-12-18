@@ -1,4 +1,5 @@
-﻿using Domain.Models.Answers;
+﻿using Domain.Models;
+using Domain.Models.Answers;
 using Domain.Models.Questions;
 using Domain.Models.Surveys;
 using Domain.Models.Users;
@@ -25,6 +26,8 @@ public class SurveyAppDbContext : DbContext
     public DbSet<SurveyAnswer> SurveyAnswers { get; set; } = null!;
     public DbSet<SurveyRating> SurveyRatings { get; set; } = null!;
     public DbSet<UserManual> UserManuals { get; set; } = null!;
+
+    public DbSet<TreatmentStrategy> TreatmentStrategies { get; set; } = null!;
 
     public SurveyAppDbContext(DbContextOptions<SurveyAppDbContext> options)
         : base(options) { }
@@ -79,5 +82,8 @@ public class SurveyAppDbContext : DbContext
 
         modelBuilder.Entity<UserManual>()
             .HasData(dbSeeder.UserManuals);
+
+        modelBuilder.Entity<TreatmentStrategy>()
+            .HasData(dbSeeder.TreatmentStrategies);
     }
 }
