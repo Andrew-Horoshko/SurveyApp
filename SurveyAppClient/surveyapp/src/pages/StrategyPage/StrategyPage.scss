@@ -1,0 +1,47 @@
+  .strategy-page {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  
+    /* Стилі для заголовку "Діагноз" */
+    h2 {
+      font-size: 24px;
+      color: #333;
+      margin-bottom: 10px;
+    }
+  
+    /* Стилі для інформації про лікування */
+    p {
+      font-size: 16px;
+      color: #555;
+      line-height: 1.5;
+      margin-bottom: 15px;
+    }
+  
+    /* Стилі для інформації про лікаря */
+    .doctor-info {
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 15px;
+      margin-top: 20px;
+  
+      /* Стилі для імені лікаря */
+      h3 {
+        font-size: 20px;
+        color: #333;
+        margin-bottom: 10px;
+      }
+  
+      /* Стилі для додаткової інформації про лікаря */
+      p {
+        font-size: 16px;
+        color: #555;
+        margin-bottom: 8px;
+      }
+    }
+  }
+  

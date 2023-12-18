@@ -9,3 +9,4 @@ export const getUserManual = async (userManualId) => {
       throw new Error('Failed to fetch surveys');
     }
   };
+
