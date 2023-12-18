@@ -5,7 +5,9 @@ import { useParams } from 'react-router-dom';
 import { getSurvey, submitSurveyAttempt } from "../../services/surveyService";
 import { getSurveyQuestions } from '../../services/SurveyQuestions';
 import { getAnswersForQuestion } from '../../services/Answer';
-import { Hint } from "../../components/Hint";
+import { Hint, StarRating } from "../../components";
+import { sendRatingToServer } from "../../services/Rating";
+import { useHistory } from 'react-router-dom';
 
 export const PlacePage: React.FC = () => {
     const [survey, setSurvey] = useState<any>();
@@ -13,6 +15,28 @@ export const PlacePage: React.FC = () => {
     const [questions, setQuestions] = useState<any[]>([]);
     const [answers, setAnswers] = useState<any[]>([]);
     const [userAnswers, setUserAnswers] = useState<{ [key: number]: SurveyAnswer[] }>({});
+    const [surveyCompleted, setSurveyCompleted] = useState(false); 
+    const history = useHistory();
+    const [ratingSent, setRatingSent] = useState(false);
+    const [currentRating, setCurrentRating] = useState(0);
+
+    const sendRating = async (rating: number) => {
+        const ratingData = {
+            surveyRatingId: 0,
+            surveyId: parseInt(id),
+            userId: 1, 
+            mark: rating,
+        };
+
+        try {
+            await sendRatingToServer(ratingData); 
+            console.log('Rating sent successfully');
+            setRatingSent(true);
+            setCurrentRating(rating);
+        } catch (error) {
+            console.error('Error sending rating:', error);
+        }
+    };
 
     useEffect(() => {
         const fetchSurvey = async () => {
@@ -108,7 +132,7 @@ export const PlacePage: React.FC = () => {
 
         submitSurveyAttempt(surveyAttempt)
             .then((response) => {
-                // Handle success response
+                setSurveyCompleted(true);
             })
             .catch((error) => {
                 console.error('Error submitting survey attempt:', error);
@@ -208,17 +232,45 @@ export const PlacePage: React.FC = () => {
 
     if (!survey) return <div>Загрузка...</div>;
 
+    const renderSurveyCompletionMessage = () => {
+        if (surveyCompleted) {
+            return (
+                <div>
+                    <h1>Дякуємо за участь у опитуванні!</h1>
+                    <h3>Будь ласка, оцініть наповнення опитування:</h3>
+                    
+                    <StarRating onChange={(rating) => sendRating(rating)} disabled={ratingSent} value={currentRating} />
+                    <br/>
+                    <button className="return-btn" onClick={() => history.push('/')}>
+                            Повернутися на головну сторінку
+                    </button>
+                </div>
+            );
+        }
+        return null;
+    };
+
     return (
         <>
             <PageHeader headerText={"Пройдіть опитування"} />
             <h1 className="page-header">{survey.title}</h1>
             <div className="place-page">
-                {questions.map((question: any) => (
-                    <React.Fragment key={question.questionId}>
-                        {renderQuestion(question)}
-                    </React.Fragment>
-                ))}
-                <button className="finish_btn" onClick={submitSurvey}>Завершити опитування</button>
+                {!surveyCompleted ? (
+                    questions.map((question: any) => (
+                        <React.Fragment key={question.questionId}>
+                            {renderQuestion(question)}
+                        </React.Fragment>
+                    ))
+                ) : (
+                    <div className="completion-message">
+                        {renderSurveyCompletionMessage()}
+                    </div>
+                )}
+                {!surveyCompleted && (
+                    <button className="finish_btn" onClick={submitSurvey}>
+                        Завершити опитування
+                    </button>
+                )}            
             </div>
         </>
     );
