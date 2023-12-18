@@ -101,7 +101,7 @@ export const PlacePage: React.FC = () => {
                             <span>{question.text}</span>
                             <Hint  hint={question.tooltip} />
                         </div>
-                        <input type="text" name={`question_${question.questionId}_textInput`} className="open-answer-input" />
+                    <input type="text" name={`question_${question.questionId}_textInput`} className="open-answer-input" />
                     </div>
                 );
             default:
