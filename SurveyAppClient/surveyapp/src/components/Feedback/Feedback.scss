@@ -1,0 +1,14 @@
+.star-rating {
+    display: inline-block;
+    font-size: 50px;
+  }
+  
+  .star {
+    cursor: pointer;
+    transition: color 0.25s;
+  }
+  
+  .star.filled {
+    color: rgb(255, 255, 0);
+  }
+  

@@ -17,7 +17,7 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ item }) => {
   return (
     <div className="place__container">
       <h3 className="place__name">{item.title}</h3>
-      <h5 className="place__rating">Рейтинг: {item.averageRating}</h5>
+      <h5 className="place__rating">Рейтинг: {item.averageRating.toFixed(1)}</h5>
 
       <Link key={item.surveyId} to={`/user-manual/${item.surveyId}`} >
       <h5 className="get-manual">Отримати довідку</h5>
