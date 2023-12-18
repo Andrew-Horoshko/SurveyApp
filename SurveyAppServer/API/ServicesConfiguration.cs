@@ -3,6 +3,7 @@ using BLL.Services.Interfaces;
 using DAL;
 using DAL.Repositories;
 using Domain;
+using Domain.Models;
 using Domain.Models.Answers;
 using SurveyAppServer.Profiles;
 using SurveyAppServer.Profiles.Answers;
@@ -34,6 +35,7 @@ public static class ServicesConfiguration
         services.AddScoped<ISurveyRatingRepository, SurveyRatingRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IUserManualRepository, UserManualRepository>();
+        services.AddScoped<IBaseRepository<TreatmentStrategy>, BaseRepository<TreatmentStrategy>>();
 
         // Services
         services.AddScoped<IAnswerService, AnswerService>();
@@ -41,6 +43,7 @@ public static class ServicesConfiguration
         services.AddScoped<ISurveyService, SurveyService>();
         services.AddScoped<ISurveyRatingService, SurveyRatingService>();
         services.AddScoped<IUserManualService, UserManualService>();
+        services.AddScoped<ITreatmentStrategyService, TreatmentStrategyService>();
         
         // Automapper
         services.AddAutoMapper(
@@ -51,6 +54,7 @@ public static class ServicesConfiguration
             typeof(SurveyViewModelToSurvey),
             typeof(SurveyRatingViewModelToSurveyRating),
             typeof(UserManualViewModelToUserManual),
-            typeof(UserViewModelToUser));
+            typeof(UserViewModelToUser),
+            typeof(TreatmentStrategyViewModelToTreatmentStrategy));
     }
 }
